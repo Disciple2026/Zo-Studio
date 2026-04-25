@@ -1,1216 +1,1350 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="dark">
-<title>Zoé Studio — Production Visuelle Premium</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Zoé Studio — Production Visuelle</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* ══════════════════════════════════════
-   RESET & BASE — FOND NOIR ABSOLU
-══════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; color-scheme:dark; }
+:root{
+  --bg:#F2EBE0;--bg2:#E8DDD0;--bg3:#EDE3D6;
+  --card:#FAF6F0;--card2:#F0E9DE;
+  --gold:#8B6914;--gold2:#A0801E;--gold3:#C4A052;
+  --red:#6B0F0F;--red2:#8B1A1A;
+  --dark:#1A1008;
+  --text:#1A1008;--text2:#3D2E14;--text3:#7A6040;
+  --border:rgba(26,16,8,.1);--border2:rgba(26,16,8,.22);
+  --sh:0 4px 24px rgba(26,16,8,.1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+#cvs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
-body {
-background:#000000;          /* NOIR TOTAL */
-color:#FFFFFF;
-font-family:‘Montserrat’, sans-serif;
-overflow-x:hidden;
--webkit-font-smoothing:antialiased;
--moz-osx-font-smoothing:grayscale;
-}
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .8s,visibility .8s;}
+#loader.off{opacity:0;visibility:hidden;pointer-events:none;}
+.ld-z{font-family:'Playfair Display',serif;font-size:80px;font-weight:900;color:var(--gold3);letter-spacing:6px;}
+.ld-bar{width:160px;height:1px;background:rgba(196,160,82,.15);overflow:hidden;}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--red2),var(--gold3));animation:ldA 1.8s ease forwards;}
+@keyframes ldA{from{width:0}to{width:100%}}
+.ld-sub{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:rgba(196,160,82,.6);}
 
-/* Sections ont toutes un fond noir solide pour isoler le texte */
-section, header, footer {
-background:rgba(0,0,0,0.0);
-position:relative;
-z-index:1;
-}
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;height:78px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;background:rgba(242,235,224,.97);border-bottom:1px solid var(--border);z-index:500;backdrop-filter:blur(14px);transition:box-shadow .3s;}
+header.sc{box-shadow:0 2px 20px rgba(26,16,8,.08);}
+.logo-zone{display:flex;align-items:center;gap:14px;}
+.logo-ring{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--gold);overflow:hidden;flex-shrink:0;}
+.logo-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.logo-ring .lz{display:none;width:100%;height:100%;background:linear-gradient(135deg,var(--red2),var(--red));align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold3);}
+.brand-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:900;letter-spacing:3px;color:var(--text);}
+.brand-sub{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--text3);margin-top:2px;}
+nav{display:flex;align-items:center;gap:2px;}
+nav a{color:var(--text2);text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;padding:8px 12px;transition:color .25s;position:relative;}
+nav a::after{content:'';position:absolute;bottom:3px;left:12px;right:100%;height:1px;background:var(--gold);transition:right .3s;}
+nav a:hover{color:var(--gold);}nav a:hover::after{right:12px;}
+.nav-espace{background:transparent;color:var(--gold2)!important;border:1px solid var(--border2)!important;padding:8px 18px!important;font-weight:600!important;margin-left:8px;transition:all .3s!important;}
+.nav-espace::after{display:none!important;}
+.nav-espace:hover{background:rgba(26,16,8,.06)!important;border-color:var(--gold)!important;}
+.nav-btn{background:var(--dark)!important;color:#F2EBE0!important;border:none!important;padding:9px 22px!important;font-weight:700!important;margin-left:6px;transition:background .3s!important;}
+.nav-btn::after{display:none!important;}
+.nav-btn:hover{background:var(--red2)!important;}
 
-/* ══════════════════════════════════════
-CANVAS FOND
-══════════════════════════════════════ */
-#canvas-bg {
-position:fixed; top:0; left:0;
-width:100%; height:100%;
-z-index:0;
-pointer-events:none;
-background:#000000;
-}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:0 6%;position:relative;z-index:1;overflow:hidden;}
+.hero-vline{position:absolute;left:6%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent 10%,var(--border) 40%,var(--border) 60%,transparent 90%);}
+.hero-bg-z{position:absolute;right:-2%;bottom:-6%;font-family:'Playfair Display',serif;font-size:clamp(200px,26vw,400px);font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(26,16,8,.04);user-select:none;pointer-events:none;line-height:1;}
+.hero-inner{padding:110px 0 160px 52px;max-width:860px;position:relative;z-index:2;}
+.hero-eye{display:flex;align-items:center;gap:14px;margin-bottom:34px;opacity:0;animation:goUp .8s ease forwards .3s;}
+.hero-eye .hl{width:32px;height:1px;background:var(--red2);}
+.hero-eye span{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--text3);}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(46px,7.5vw,116px);font-weight:900;line-height:.92;letter-spacing:-2px;margin-bottom:28px;opacity:0;animation:goUp .8s ease forwards .55s;}
+.hero-h1 .l1{display:block;color:var(--text);}
+.hero-h1 .l2{display:block;color:var(--text);font-style:italic;}
+.hero-h1 .l3{display:block;font-family:'Cormorant Garamond',serif;font-size:.36em;font-weight:400;font-style:normal;letter-spacing:7px;color:var(--gold);margin-top:14px;}
+.hero-p{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--text2);max-width:520px;line-height:1.85;margin-bottom:50px;opacity:0;animation:goUp .8s ease forwards .8s;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:goUp .8s ease forwards 1s;}
+.btn-dark{display:inline-block;background:var(--dark);color:#F2EBE0;padding:15px 44px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700;text-decoration:none;transition:all .3s;}
+.btn-dark:hover{background:var(--red2);transform:translateY(-2px);}
+.btn-outline{display:inline-block;background:transparent;color:var(--text2);padding:15px 44px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:500;text-decoration:none;border:1px solid var(--border2);transition:all .3s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-wa{display:inline-flex;align-items:center;gap:8px;background:rgba(46,120,70,.1);color:#2E7846;padding:15px 26px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none;border:1px solid rgba(46,120,70,.22);transition:all .3s;}
+.btn-wa:hover{background:rgba(46,120,70,.18);}
+.hero-scroll{position:absolute;bottom:32px;left:calc(6% + 52px);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeIn .8s ease forwards 1.8s;}
+.hero-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);}
+.sc-track{width:38px;height:1px;background:var(--border2);overflow:hidden;position:relative;}
+.sc-track::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);animation:scT 2s ease infinite;}
+@keyframes scT{0%{left:-100%}100%{left:100%}}
 
-/* ══════════════════════════════════════
-LOADER
-══════════════════════════════════════ */
-#loader {
-position:fixed; inset:0;
-background:#000000;
-z-index:9999;
-display:flex; flex-direction:column;
-align-items:center; justify-content:center;
-gap:30px;
-transition:opacity .7s ease, visibility .7s ease;
-}
-#loader.off { opacity:0; visibility:hidden; pointer-events:none; }
-.ld-title {
-font-family:‘Playfair Display’, serif;
-font-size:56px; font-weight:900;
-color:#FFFFFF; letter-spacing:4px;
-}
-.ld-title span { color:#D4AF37; }
-.ld-sub {
-font-family:‘Cormorant Garamond’, serif;
-font-size:13px; letter-spacing:6px;
-text-transform:uppercase; color:rgba(212,175,55,0.7);
-}
-.ld-bar {
-width:240px; height:2px;
-background:rgba(255,255,255,0.06);
-overflow:hidden;
-}
-.ld-progress {
-height:100%;
-background:linear-gradient(90deg, #C8102E, #FF1A35, #D4AF37);
-animation:ldAnim 1.8s ease forwards;
-}
-@keyframes ldAnim { from{width:0} to{width:100%} }
+/* DIVIDER */
+.div{height:1px;background:var(--border);margin:0 6%;}
 
-/* ══════════════════════════════════════
-HEADER
-══════════════════════════════════════ */
-header {
-position:fixed; top:0; left:0; right:0;
-height:86px; padding:0 5%;
-display:flex; align-items:center; justify-content:space-between;
-background:#000000;
-border-bottom:1px solid rgba(212,175,55,0.25);
-z-index:500;
-}
+/* SECTIONS */
+.sec{padding:96px 6%;position:relative;z-index:1;}
+.sec-d{padding:96px 6%;background:var(--bg2);position:relative;z-index:1;}
+.ey{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.ey .el{width:22px;height:1px;background:var(--red2);}
+.ey span{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--text3);}
+.st{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,52px);font-weight:900;color:var(--text);line-height:1.05;margin-bottom:52px;}
+.st em{color:var(--red2);font-style:italic;}
 
-.logo-zone { display:flex; align-items:center; gap:16px; }
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);max-width:820px;margin:0 auto;}
+.stat{padding:42px 24px;text-align:center;border-right:1px solid var(--border);background:var(--card);transition:background .3s;}
+.stat:last-child{border-right:none;}
+.stat:hover{background:var(--card2);}
+.stat-n{font-family:'Playfair Display',serif;font-size:clamp(38px,5vw,56px);font-weight:900;color:var(--gold);display:block;line-height:1;}
+.stat-n sup{font-size:.45em;color:var(--red2);vertical-align:super;}
+.stat-l{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-top:8px;display:block;}
 
-/* LOGO — cadre rond */
-.logo-ring {
-width:58px; height:58px;
-border-radius:50%;
-border:2px solid #D4AF37;
-background:linear-gradient(135deg, #C8102E, #6B0010);
-display:flex; align-items:center; justify-content:center;
-overflow:hidden; flex-shrink:0;
-box-shadow:0 0 22px rgba(200,16,46,0.55), 0 0 0 5px rgba(212,175,55,0.08);
-}
-/* ✏️ LOGO : remplace src=”” par ex: src=“logo.png” */
-.logo-ring img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:none; }
-.logo-ring img.loaded { display:block; }
-.logo-ring .logo-z {
-font-family:‘Playfair Display’, serif;
-font-size:26px; font-weight:900; color:#D4AF37;
-}
+/* SERVICES */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1px;background:var(--border);}
+.svc{background:var(--card);padding:40px 28px;transition:background .3s;position:relative;}
+.svc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red2),transparent);transform:scaleX(0);transition:transform .4s;}
+.svc:hover{background:var(--card2);}
+.svc:hover::before{transform:scaleX(1);}
+.svc-i{font-size:26px;margin-bottom:16px;display:block;}
+.svc-n{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.svc-t{font-size:12.5px;color:var(--text2);line-height:1.75;}
+.svc-tag{display:inline-block;margin-top:14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
 
-.brand { }
-.brand-name {
-font-family:‘Playfair Display’, serif;
-font-size:23px; font-weight:900;
-letter-spacing:4px; color:#FFFFFF;
-}
-.brand-name span { color:#D4AF37; }
-.brand-sub {
-font-family:‘Cormorant Garamond’, serif;
-font-size:10px; letter-spacing:5px;
-text-transform:uppercase;
-color:rgba(212,175,55,0.65);
-margin-top:3px;
-}
+/* GALERIE */
+.gf-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;}
+.gf{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:7px 18px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s;}
+.gf:hover,.gf.on{background:var(--dark);color:#F2EBE0;border-color:var(--dark);}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.gi{position:relative;overflow:hidden;background:var(--card);aspect-ratio:16/10;cursor:pointer;}
+.gi img,.gi video{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.gi:hover img,.gi:hover video{transform:scale(1.04);}
+.gi-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(26,16,8,.88));opacity:0;transition:opacity .35s;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;}
+.gi:hover .gi-ov{opacity:1;}
+.gi-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#F2EBE0;}
+.gi-cat{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold3);margin-top:3px;}
+.gi-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(26,16,8,.8);display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transition:opacity .3s;color:#F2EBE0;}
+.gi.vid:hover .gi-play{opacity:1;}
+.gal-empty{text-align:center;padding:60px;color:var(--text3);font-family:'Cormorant Garamond',serif;font-size:17px;grid-column:1/-1;}
 
-nav { display:flex; align-items:center; gap:4px; }
-nav a {
-color:rgba(255,255,255,0.82);
-text-decoration:none;
-font-size:10px; letter-spacing:2.5px;
-text-transform:uppercase; font-weight:600;
-padding:9px 16px;
-transition:color .25s;
-position:relative;
-}
-nav a::after {
-content:’’;
-position:absolute; bottom:5px; left:16px; right:100%;
-height:1px; background:#D4AF37;
-transition:right .25s;
-}
-nav a:hover { color:#D4AF37; }
-nav a:hover::after { right:16px; }
+/* LIGHTBOX */
+#lb{position:fixed;inset:0;background:rgba(26,16,8,.96);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px;}
+#lb.on{display:flex;}
+.lb-in{max-width:90vw;max-height:90vh;position:relative;}
+.lb-in img,.lb-in video{max-width:90vw;max-height:85vh;object-fit:contain;}
+.lb-x{position:absolute;top:-40px;right:0;background:none;border:none;color:var(--gold3);font-size:26px;cursor:pointer;}
+.lb-cap{position:absolute;bottom:-34px;left:0;right:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(196,160,82,.6);letter-spacing:2px;}
 
-.nav-btn {
-background:linear-gradient(135deg, #C8102E, #8B0010) !important;
-color:#FFFFFF !important;
-border:1px solid #D4AF37 !important;
-padding:12px 28px !important;
-font-weight:700 !important;
-box-shadow:0 0 22px rgba(200,16,46,0.4);
-margin-left:12px;
-transition:box-shadow .3s, transform .3s !important;
-}
-.nav-btn::after { display:none !important; }
-.nav-btn:hover { box-shadow:0 0 44px rgba(200,16,46,0.7) !important; transform:translateY(-1px); }
+/* TEMOIGNAGES */
+.temo-outer{overflow:hidden;}
+.temo-track{display:flex;gap:18px;transition:transform .6s cubic-bezier(.4,0,.2,1);}
+.tc{min-width:calc(33.333% - 12px);background:var(--card);border:1px solid var(--border);padding:34px 26px;flex-shrink:0;transition:border-color .3s;}
+.tc:hover{border-color:var(--border2);}
+.tc-stars{display:flex;gap:3px;margin-bottom:16px;}
+.tc-stars span{color:var(--gold);font-size:13px;}
+.tc-q{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text2);line-height:1.8;margin-bottom:22px;font-style:italic;}
+.tc-sep{width:18px;height:1px;background:var(--red2);margin-bottom:16px;}
+.tc-nm{font-size:12px;font-weight:600;color:var(--text);letter-spacing:1px;}
+.tc-ev{font-size:11px;color:var(--gold);margin-top:3px;opacity:.8;}
+.t-nav{display:flex;align-items:center;gap:10px;margin-top:26px;}
+.t-btn{width:38px;height:38px;background:none;border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .25s;}
+.t-btn:hover{border-color:var(--gold);color:var(--gold);}
+.t-dots{display:flex;gap:6px;}
+.td{width:16px;height:2px;background:var(--border2);cursor:pointer;transition:all .3s;}
+.td.on{background:var(--gold);width:26px;}
 
-/* ══════════════════════════════════════
-HERO
-══════════════════════════════════════ */
-#hero {
-min-height:100vh;
-display:flex; align-items:center; justify-content:center;
-overflow:hidden; z-index:1;
-}
+/* FAQ */
+.faq-w{max-width:700px;margin:0 auto;}
+.fi-item{border-bottom:1px solid var(--border);}
+.fq{width:100%;background:none;border:none;color:var(--text);font-family:'Playfair Display',serif;font-size:17px;font-weight:700;padding:22px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:color .25s;}
+.fq:hover{color:var(--gold);}
+.fi-ico{width:22px;height:22px;border:1px solid var(--border2);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:transform .35s;}
+.fi-item.open .fi-ico{transform:rotate(45deg);}
+.fa{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s;}
+.fi-item.open .fa{max-height:200px;padding-bottom:20px;}
+.fa p{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text2);line-height:1.8;}
 
-/* Lueur rouge centrale TRÈS visible sur fond noir */
-.hero-glow {
-position:absolute; top:50%; left:50%;
-transform:translate(-50%,-50%);
-width:900px; height:900px;
-background:radial-gradient(circle,
-rgba(200,16,46,0.22) 0%,
-rgba(200,16,46,0.08) 35%,
-transparent 70%);
-pointer-events:none; z-index:0;
-}
+/* RESERVATION */
+.resa-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:52px;max-width:1100px;margin-left:auto;margin-right:auto;}
+.fl{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-weight:500;}
+.fi,.fs,.ft{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);padding:12px 0;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .3s;}
+.fi::placeholder{color:var(--text3);}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--gold);}
+.fs option{background:var(--bg);color:var(--text);}
+.ft{resize:vertical;min-height:100px;border:1px solid var(--border);padding:12px;background:var(--card);}
+.ft:focus{border-color:var(--gold);}
+.fg{margin-bottom:24px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.cal-clock{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
+.cal-box{background:var(--card);border:1px solid var(--border);padding:14px;}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.cal-my{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--gold);}
+.cal-nav{background:none;border:1px solid var(--border2);color:var(--gold);width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.cal-nav:hover{background:var(--dark);color:#F2EBE0;}
+.cal-wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:5px;}
+.cal-wk span{font-size:9px;color:var(--text3);padding:2px 0;}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:var(--text2);transition:all .2s;}
+.cd:hover{background:rgba(139,26,26,.12);color:var(--red2);}
+.cd.sel{background:var(--red2);color:#fff;font-weight:700;}
+.cd.tod{color:var(--gold);font-weight:700;}
+.cd.dim{color:var(--text3);cursor:default;opacity:.4;}
+.cal-p{margin-top:8px;text-align:center;font-size:10px;letter-spacing:1.5px;color:var(--gold);min-height:14px;}
+.clk-box{background:var(--card);border:1px solid var(--border);padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.clk-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);}
+.clk-face{width:92px;height:92px;border-radius:50%;border:1px solid var(--border2);background:var(--bg2);position:relative;}
+.clk-c{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:7px;height:7px;background:var(--gold);border-radius:50%;z-index:10;}
+.hand{position:absolute;bottom:50%;left:50%;transform-origin:bottom center;border-radius:2px;}
+.h-h{width:2px;height:22px;background:var(--text);margin-left:-1px;}
+.h-m{width:1.5px;height:30px;background:var(--red2);margin-left:-.75px;}
+.h-s{width:1px;height:34px;background:var(--gold);margin-left:-.5px;}
+.clk-sel{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.t-sel{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);padding:4px;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;-webkit-appearance:none;appearance:none;text-align:center;width:46px;cursor:pointer;}
+.t-sep{color:var(--gold);font-size:15px;}
+.btn-sub{width:100%;margin-top:10px;background:var(--dark);color:#F2EBE0;border:none;padding:16px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700;transition:background .3s;}
+.btn-sub:hover{background:var(--red2);}
+.suc-box{display:none;margin-top:14px;padding:20px;border:1px solid var(--border2);text-align:center;background:var(--card);}
+.suc-box.on{display:block;}
+.suc-box p{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold);}
+.info-col{display:flex;flex-direction:column;gap:30px;padding-top:4px;}
+.ic-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;display:block;}
+.ic-t{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--text);margin-bottom:7px;}
+.ic-p{font-size:13px;color:var(--text2);line-height:1.8;}
+.step{display:flex;gap:13px;margin-bottom:16px;align-items:flex-start;}
+.sn{width:26px;height:26px;flex-shrink:0;border:1px solid rgba(139,26,26,.35);color:var(--red2);font-family:'Playfair Display',serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.sb{font-size:12px;color:var(--text2);line-height:1.65;padding-top:3px;}
+.sb strong{display:block;color:var(--text);font-weight:600;margin-bottom:2px;}
 
-.hero-inner {
-text-align:center; position:relative; z-index:2;
-padding:110px 24px 190px;
-max-width:1020px;
-}
+/* CONTACT */
+.contact-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--border);max-width:840px;margin:48px auto 0;}
+.cc{background:var(--card);padding:36px 20px;text-align:center;transition:background .3s;}
+.cc:hover{background:var(--card2);}
+.cc-i{font-size:24px;margin-bottom:12px;}
+.cc-l{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.cc-v{font-family:'Playfair Display',serif;font-size:14px;color:var(--text);margin-bottom:16px;}
+.btn-c{display:inline-block;padding:9px 20px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all .3s;cursor:pointer;border:none;}
+.c-wa{background:transparent;color:#2E7846;border:1px solid rgba(46,120,70,.3);}
+.c-wa:hover{background:rgba(46,120,70,.1);}
+.c-g{background:transparent;color:var(--gold);border:1px solid var(--border2);}
+.c-g:hover{border-color:var(--gold2);color:var(--gold2);}
+.c-r{background:transparent;color:var(--red2);border:1px solid rgba(139,26,26,.3);}
+.c-r:hover{border-color:var(--red2);}
 
-.hero-top {
-font-family:‘Cormorant Garamond’, serif;
-font-size:13px; letter-spacing:7px;
-text-transform:uppercase; color:#D4AF37;
-margin-bottom:30px;
-opacity:0; animation:goUp .9s ease forwards .3s;
-}
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(196,160,82,.15);padding:56px 6% 26px;position:relative;z-index:1;}
+.ft-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:36px;padding-bottom:34px;border-bottom:1px solid rgba(255,255,255,.06);}
+.ft-nm{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--gold3);letter-spacing:2px;}
+.ft-tag{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,160,82,.5);margin-top:8px;max-width:250px;line-height:1.7;}
+.ft-col h4{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(196,160,82,.4);margin-bottom:14px;}
+.ft-col a{display:block;color:rgba(242,235,224,.35);text-decoration:none;font-size:12px;margin-bottom:9px;transition:color .3s;}
+.ft-col a:hover{color:var(--gold3);}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:22px;}
+.ft-copy{font-size:11px;color:rgba(255,255,255,.2);}
+.ft-copy span{color:rgba(196,160,82,.5);}
+.ft-credit{font-size:11px;color:rgba(255,255,255,.15);font-style:italic;}
+.ft-credit span{color:rgba(196,160,82,.4);}
+#secret-zone{cursor:default;user-select:none;}
 
-.hero-h1 {
-font-family:‘Playfair Display’, serif;
-font-size:clamp(52px, 9vw, 132px);
-font-weight:900; line-height:.9;
-letter-spacing:-2px; margin-bottom:34px;
-opacity:0; animation:goUp .9s ease forwards .6s;
-}
-.hero-h1 .l1 { display:block; color:#FFFFFF; }
-.hero-h1 .l2 {
-display:block; font-style:italic;
-color:transparent;
--webkit-text-stroke:2px #FF1A35;
-}
-.hero-h1 .l3 {
-display:block;
-font-family:‘Cormorant Garamond’, serif;
-font-size:.42em; font-weight:400; font-style:normal;
-letter-spacing:10px; color:#D4AF37; margin-top:12px;
-}
+/* MODALS */
+.modal{position:fixed;inset:0;z-index:7000;background:rgba(26,16,8,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal.on{display:flex;}
+.mbox{background:var(--bg);width:100%;max-width:400px;padding:42px 34px;position:relative;border:1px solid var(--border);}
+.mcl{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;transition:color .2s;}
+.mcl:hover{color:var(--gold);}
+.mlogo{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--gold);letter-spacing:3px;margin-bottom:3px;}
+.msub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--text3);margin-bottom:26px;}
+.minput{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:13px 14px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;margin-bottom:12px;transition:border-color .3s;}
+.minput:focus{border-color:var(--gold);}
+.mbtn{width:100%;background:var(--dark);color:#F2EBE0;border:none;padding:14px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .3s;margin-bottom:10px;}
+.mbtn:hover{background:var(--red2);}
+.merr{font-size:12px;color:var(--red2);margin-top:6px;display:none;}
+.merr.on{display:block;}
+.minfo{font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.6;}
+.mlink{font-size:11px;color:var(--gold);cursor:pointer;text-decoration:underline;display:block;text-align:center;margin-top:6px;}
 
-.hero-p {
-font-family:‘Cormorant Garamond’, serif;
-font-size:22px; font-weight:400;
-color:rgba(255,255,255,0.9);
-max-width:600px; margin:0 auto 50px;
-line-height:1.75;
-opacity:0; animation:goUp .9s ease forwards .9s;
-}
+/* ESPACE CLIENT */
+#client-dash{position:fixed;inset:0;z-index:6000;background:var(--bg);display:none;flex-direction:column;overflow:hidden;}
+#client-dash.on{display:flex;}
+.cd-hdr{background:var(--dark);height:62px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(196,160,82,.15);flex-shrink:0;}
+.cd-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:var(--gold3);letter-spacing:2px;}
+.cd-user{display:flex;align-items:center;gap:14px;}
+.cd-email{font-size:11px;color:rgba(196,160,82,.6);}
+.cd-logout{background:none;border:1px solid rgba(196,160,82,.3);color:rgba(196,160,82,.7);padding:6px 14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.cd-logout:hover{border-color:var(--gold3);color:var(--gold3);}
+.cd-tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.cd-tab{padding:13px 20px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .25s;}
+.cd-tab.on{color:var(--gold);border-color:var(--gold);}
+.cd-body{flex:1;overflow-y:auto;padding:28px 5%;}
+.cd-pane{display:none;}
+.cd-pane.on{display:block;}
+.cd-welcome{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.cd-welsub{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text2);margin-bottom:28px;}
+.order-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);padding:24px;margin-bottom:16px;}
+.order-badge{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;font-weight:600;margin-bottom:12px;}
+.ob-new{background:rgba(139,26,26,.1);color:var(--red2);border:1px solid rgba(139,26,26,.2);}
+.ob-ok{background:rgba(139,105,20,.1);color:var(--gold);border:1px solid var(--border2);}
+.ob-done{background:rgba(46,120,70,.1);color:#2E7846;border:1px solid rgba(46,120,70,.2);}
+.order-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--text2);}
+.order-row span{color:var(--text);font-weight:500;}
+.deliv-card{background:var(--card);border:1px solid var(--border);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.deliv-name{font-size:13px;font-weight:600;color:var(--text);}
+.deliv-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.deliv-dl{background:var(--dark);color:#F2EBE0;border:none;padding:9px 20px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;transition:background .3s;}
+.deliv-dl:hover{background:var(--red2);}
+.deliv-empty{text-align:center;padding:40px;color:var(--text3);font-family:'Cormorant Garamond',serif;font-size:16px;}
 
-.hero-ctas {
-display:flex; gap:20px; justify-content:center; flex-wrap:wrap;
-opacity:0; animation:goUp .9s ease forwards 1.2s;
-}
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 220px);max-height:580px;background:var(--card);border:1px solid var(--border);}
+.chat-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.chat-dot{width:8px;height:8px;border-radius:50%;background:#2E7846;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.chat-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text);}
+.chat-sub{font-size:10px;color:var(--text3);}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;}
+.chat-msgs::-webkit-scrollbar{width:4px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.msg-b{max-width:75%;padding:10px 14px;line-height:1.6;}
+.msg-b.admin{background:var(--bg2);border:1px solid var(--border);color:var(--text);align-self:flex-start;}
+.msg-b.client{background:var(--dark);color:#F2EBE0;align-self:flex-end;}
+.msg-b .msg-txt{font-size:13px;}
+.msg-b .msg-time{font-size:10px;opacity:.5;margin-top:4px;}
+.msg-b.admin .msg-from{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;font-weight:600;}
+.chat-input-row{display:flex;border-top:1px solid var(--border);flex-shrink:0;}
+.chat-inp{flex:1;background:transparent;border:none;color:var(--text);padding:14px 16px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;}
+.chat-inp::placeholder{color:var(--text3);}
+.chat-send{background:var(--dark);color:#F2EBE0;border:none;padding:14px 22px;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .3s;flex-shrink:0;}
+.chat-send:hover{background:var(--red2);}
+.chat-empty{text-align:center;padding:30px;color:var(--text3);font-family:'Cormorant Garamond',serif;font-size:16px;margin:auto;}
 
-.cta-red {
-display:inline-block;
-background:linear-gradient(135deg, #C8102E, #8B0010);
-color:#FFFFFF; padding:18px 52px;
-font-family:‘Montserrat’, sans-serif;
-font-size:11px; letter-spacing:3px;
-text-transform:uppercase; font-weight:700;
-text-decoration:none; border:1px solid #C8102E;
-box-shadow:0 0 35px rgba(200,16,46,0.5);
-transition:all .35s; position:relative; overflow:hidden;
-}
-.cta-red::before {
-content:’’; position:absolute;
-top:0; left:-100%; width:100%; height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
-transition:left .45s;
-}
-.cta-red:hover::before { left:100%; }
-.cta-red:hover { box-shadow:0 0 65px rgba(200,16,46,0.8); transform:translateY(-3px); }
+/* ADMIN */
+#adm-panel{position:fixed;inset:0;z-index:6500;background:var(--bg);display:none;flex-direction:column;overflow:hidden;}
+#adm-panel.on{display:flex;}
+.adm-hdr{background:var(--dark);height:62px;padding:0 4%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(196,160,82,.15);flex-shrink:0;}
+.adm-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:var(--gold3);letter-spacing:3px;}
+.adm-close{background:none;border:none;color:rgba(196,160,82,.6);font-size:18px;cursor:pointer;padding:6px;transition:color .2s;}
+.adm-close:hover{color:var(--gold3);}
+.adm-tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.a-tab{padding:13px 18px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .25s;flex-shrink:0;}
+.a-tab.on{color:var(--gold);border-color:var(--gold);}
+.adm-body{flex:1;overflow-y:auto;padding:22px 4%;}
+.tp{display:none;}
+.tp.on{display:block;}
+.adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+.as{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--gold);padding:16px;}
+.as-n{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--gold);display:block;line-height:1;}
+.as-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:3px;display:block;}
+.as-b{font-size:10px;color:var(--red2);font-weight:600;margin-top:2px;}
+.cmd{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--border);padding:14px 16px;margin-bottom:8px;}
+.cmd.new{border-left-color:var(--red2);}
+.cmd.ok{border-left-color:var(--gold);}
+.cmd.done{border-left-color:#2E7846;}
+.cmd-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.cmd-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text);}
+.cmd-badge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;font-weight:600;}
+.b-new{background:rgba(139,26,26,.1);color:var(--red2);}
+.b-ok{background:rgba(139,105,20,.1);color:var(--gold);}
+.b-done{background:rgba(46,120,70,.1);color:#2E7846;}
+.cmd-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.cmd-meta span{font-size:11px;color:var(--text3);}
+.cmd-svc{font-size:12px;color:var(--text2);font-style:italic;margin-bottom:10px;}
+.cmd-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.cb{padding:6px 14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;transition:all .25s;}
+.cb-ok{background:rgba(139,105,20,.08);color:var(--gold);border:1px solid var(--border2);}
+.cb-ok:hover{background:var(--gold);color:#F2EBE0;}
+.cb-done{background:rgba(46,120,70,.08);color:#2E7846;border:1px solid rgba(46,120,70,.2);}
+.cb-done:hover{background:#2E7846;color:#fff;}
+.cb-wa{background:rgba(46,120,70,.06);color:#2E7846;border:1px solid rgba(46,120,70,.18);}
+.cb-wa:hover{background:#2E7846;color:#fff;}
+.cb-del{background:rgba(139,26,26,.06);color:var(--red2);border:1px solid rgba(139,26,26,.18);}
+.cb-del:hover{background:var(--red2);color:#fff;}
+.adm-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.adm-inp,.adm-sel{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;-webkit-appearance:none;transition:border-color .3s;margin-bottom:12px;}
+.adm-inp:focus,.adm-sel:focus{border-color:var(--gold);}
+.adm-sel option{background:var(--bg);}
+.adm-btn{padding:10px 22px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;transition:all .3s;}
+.ab-p{background:var(--dark);color:#F2EBE0;}
+.ab-p:hover{background:var(--red2);}
+.ab-g{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.ab-g:hover{border-color:var(--gold);color:var(--gold);}
+.upload-zone{border:2px dashed var(--border2);padding:28px;text-align:center;cursor:pointer;transition:border-color .3s;}
+.upload-zone:hover{border-color:var(--gold);}
+.adm-gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+.ag-item{position:relative;aspect-ratio:4/3;background:var(--card);overflow:hidden;}
+.ag-item img,.ag-item video{width:100%;height:100%;object-fit:cover;}
+.ag-del{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(139,26,26,.9);border:none;color:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.ag-item:hover .ag-del{opacity:1;}
+.ag-lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(26,16,8,.75);padding:4px 6px;font-size:10px;color:var(--gold3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chart-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.chart-lbl{font-size:12px;color:var(--text2);min-width:160px;flex-shrink:0;}
+.chart-bar-wrap{flex:1;height:5px;background:var(--border);}
+.chart-bar{height:100%;background:var(--gold);transition:width .8s;}
+.chart-val{font-size:11px;color:var(--text3);min-width:22px;text-align:right;}
+.adm-conv-item{background:var(--card);border:1px solid var(--border);padding:12px 16px;cursor:pointer;transition:border-color .3s;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.adm-conv-item:hover{border-color:var(--border2);}
+.adm-conv-item.unread{border-left:3px solid var(--red2);}
+.aci-email{font-size:13px;font-weight:600;color:var(--text);}
+.aci-preview{font-size:12px;color:var(--text3);margin-top:2px;}
+.aci-badge{background:var(--red2);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;flex-shrink:0;}
 
-.cta-gold {
-display:inline-block; background:transparent;
-color:#D4AF37; padding:18px 52px;
-font-family:‘Montserrat’, sans-serif;
-font-size:11px; letter-spacing:3px;
-text-transform:uppercase; font-weight:600;
-text-decoration:none; border:1px solid #D4AF37;
-transition:all .35s;
-}
-.cta-gold:hover { background:rgba(212,175,55,0.1); box-shadow:0 0 30px rgba(212,175,55,0.3); transform:translateY(-3px); }
+/* LOADING STATE */
+.loading-state{text-align:center;padding:30px;color:var(--text3);font-family:'Cormorant Garamond',serif;font-size:16px;}
 
-/* Badges + scroll — en bas du hero */
-.hero-foot {
-position:absolute; bottom:30px; left:50%;
-transform:translateX(-50%);
-display:flex; flex-direction:column;
-align-items:center; gap:16px;
-opacity:0; animation:fadeIn 1s ease forwards 2s;
-white-space:nowrap; z-index:3;
-}
-.badges { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
-.badge {
-background:rgba(0,0,0,0.85);
-border:1px solid rgba(212,175,55,0.4);
-padding:10px 20px; font-size:11px;
-letter-spacing:1px; color:#D4AF37;
-display:flex; align-items:center; gap:8px;
-animation:floatY 6s ease-in-out infinite;
-}
-.badge:last-child { animation-delay:3s; }
-.badge .dot {
-width:7px; height:7px;
-background:#FF1A35; border-radius:50%;
-animation:blink 2s infinite;
-}
-.scroll-arr { display:flex; flex-direction:column; align-items:center; gap:6px; }
-.scroll-arr span { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#D4AF37; }
-.scroll-line { width:1px; height:38px; background:linear-gradient(180deg,#D4AF37,transparent); animation:scrollPulse 2s ease infinite; }
+/* REVEAL */
+.rev{opacity:0;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease;}
+.rev.on{opacity:1;transform:translateY(0);}
+@keyframes goUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-/* ══════════════════════════════════════
-DIVIDERS
-══════════════════════════════════════ */
-.div-or {
-display:flex; align-items:center; gap:18px;
-padding:0 7%; position:relative; z-index:1;
-background:#000000;
-}
-.div-or .line { flex:1; height:1px; background:linear-gradient(90deg,transparent,#D4AF37,transparent); }
-.div-or .dia { width:9px; height:9px; background:#D4AF37; transform:rotate(45deg); flex-shrink:0; }
-
-/* ══════════════════════════════════════
-SECTIONS — FOND NOIR SOLIDE
-══════════════════════════════════════ */
-.sec-wrap { background:#000000; padding:110px 6%; }
-.sec-wrap-alt { background:#050505; padding:110px 6%; }
-
-.sec-eye {
-font-family:‘Cormorant Garamond’, serif;
-font-size:13px; letter-spacing:6px;
-text-transform:uppercase; color:#D4AF37;
-display:block; margin-bottom:14px;
-}
-.sec-h {
-font-family:‘Playfair Display’, serif;
-font-size:clamp(36px, 5vw, 64px);
-font-weight:900; line-height:1; color:#FFFFFF;
-}
-.sec-h em { color:#FF1A35; font-style:italic; }
-.sec-head { text-align:center; margin-bottom:72px; }
-
-/* ══════════════════════════════════════
-SERVICES
-══════════════════════════════════════ */
-.grid-svc { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2px; }
-
-.svc {
-background:#0C0C0C;
-border:1px solid rgba(212,175,55,0.12);
-padding:48px 36px;
-position:relative; overflow:hidden;
-transition:transform .4s, border-color .4s;
-}
-.svc::before {
-content:’’; position:absolute;
-top:0; left:0; right:0; height:2px;
-background:linear-gradient(90deg,transparent,#FF1A35,transparent);
-transform:scaleX(0); transition:transform .4s;
-}
-.svc:hover { transform:translateY(-6px); border-color:rgba(212,175,55,0.35); }
-.svc:hover::before { transform:scaleX(1); }
-.svc-ico { font-size:40px; margin-bottom:22px; display:block; }
-.svc-nm {
-font-family:‘Playfair Display’, serif;
-font-size:21px; font-weight:700; color:#FFFFFF; margin-bottom:10px;
-}
-.svc-tx { font-size:13px; color:rgba(255,255,255,0.68); line-height:1.75; }
-.svc-tag {
-display:inline-block; margin-top:20px;
-font-size:9px; letter-spacing:2px; text-transform:uppercase;
-color:#D4AF37; border:1px solid rgba(212,175,55,0.4); padding:5px 14px;
-}
-
-/* ══════════════════════════════════════
-RESERVATION
-══════════════════════════════════════ */
-.resa-grid {
-display:grid; grid-template-columns:1fr 1fr;
-gap:60px; margin-top:60px; max-width:1100px; margin-left:auto; margin-right:auto;
-}
-
-/* FORM */
-.fg { margin-bottom:26px; }
-.fl {
-display:block; font-size:10px; letter-spacing:3px;
-text-transform:uppercase; color:#D4AF37; margin-bottom:10px;
-font-weight:600;
-}
-.fi, .fs, .ft {
-width:100%;
-background:#0A0A0A;
-border:1px solid rgba(212,175,55,0.3);
-color:#FFFFFF; padding:15px 18px;
-font-family:‘Montserrat’, sans-serif; font-size:13px;
-outline:none; -webkit-appearance:none; appearance:none;
-transition:border-color .3s, box-shadow .3s;
-}
-.fi::placeholder { color:rgba(255,255,255,0.35); }
-.fi:focus, .fs:focus, .ft:focus {
-border-color:#FF1A35;
-box-shadow:0 0 0 2px rgba(200,16,46,0.2);
-background:#0D0000;
-}
-.fs option { background:#0A0A0A; color:#FFFFFF; }
-.ft { resize:vertical; min-height:118px; }
-.fg2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-
-/* CALENDRIER + HORLOGE */
-.cal-clock { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-
-.cal-box {
-background:#080808;
-border:1px solid rgba(212,175,55,0.25); padding:18px;
-}
-.cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.cal-my {
-font-family:‘Playfair Display’, serif;
-font-size:15px; font-weight:700; color:#D4AF37;
-}
-.cal-nav {
-background:none; border:1px solid rgba(212,175,55,0.35);
-color:#D4AF37; width:28px; height:28px;
-cursor:pointer; font-size:15px;
-display:flex; align-items:center; justify-content:center;
-transition:background .2s;
-}
-.cal-nav:hover { background:rgba(212,175,55,0.12); }
-.cal-wk { display:grid; grid-template-columns:repeat(7,1fr); text-align:center; margin-bottom:7px; }
-.cal-wk span { font-size:9px; letter-spacing:1px; color:rgba(212,175,55,0.5); padding:3px 0; }
-.cal-g { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
-.cd {
-aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-font-size:11px; cursor:pointer; color:rgba(255,255,255,0.8);
-transition:background .2s, color .2s; border-radius:2px;
-}
-.cd:hover { background:rgba(200,16,46,0.3); color:#FFFFFF; }
-.cd.sel { background:#C8102E; color:#FFFFFF; font-weight:700; }
-.cd.tod { color:#D4AF37; font-weight:700; }
-.cd.dim { color:rgba(255,255,255,0.22); cursor:default; }
-.cal-picked { margin-top:10px; text-align:center; font-size:11px; letter-spacing:2px; color:#D4AF37; min-height:18px; }
-
-/* HORLOGE */
-.clk-box {
-background:#080808;
-border:1px solid rgba(212,175,55,0.25); padding:18px;
-display:flex; flex-direction:column; align-items:center; gap:10px;
-}
-.clk-lbl { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#D4AF37; }
-.clk-face {
-width:108px; height:108px; border-radius:50%;
-border:2px solid rgba(212,175,55,0.5);
-background:radial-gradient(circle, #150000 0%, #000000 100%);
-position:relative;
-box-shadow:0 0 30px rgba(200,16,46,0.35), inset 0 0 18px rgba(0,0,0,0.8);
-}
-.clk-center {
-position:absolute; top:50%; left:50%;
-transform:translate(-50%,-50%);
-width:9px; height:9px; background:#D4AF37;
-border-radius:50%; z-index:10;
-}
-.hand { position:absolute; bottom:50%; left:50%; transform-origin:bottom center; border-radius:3px; }
-.h-h { width:3px; height:28px; background:#FFFFFF; margin-left:-1.5px; }
-.h-m { width:2px; height:38px; background:#FF1A35; margin-left:-1px; }
-.h-s { width:1px; height:42px; background:#D4AF37; margin-left:-.5px; }
-.clk-sel-row { display:flex; align-items:center; gap:8px; margin-top:6px; }
-.t-sel {
-background:#0A0A0A; border:1px solid rgba(212,175,55,0.3);
-color:#FFFFFF; padding:8px 10px;
-font-family:‘Montserrat’, sans-serif; font-size:13px;
-outline:none; -webkit-appearance:none; appearance:none;
-text-align:center; width:60px; cursor:pointer;
-}
-.t-sep { color:#D4AF37; font-weight:700; font-size:18px; }
-
-/* BOUTON SUBMIT */
-.btn-sub {
-width:100%; margin-top:10px;
-background:linear-gradient(135deg, #C8102E, #8B0010);
-color:#FFFFFF; border:1px solid #D4AF37;
-padding:20px; cursor:pointer;
-font-family:‘Montserrat’, sans-serif;
-font-size:11px; letter-spacing:4px;
-text-transform:uppercase; font-weight:700;
-box-shadow:0 0 30px rgba(200,16,46,0.45);
-transition:box-shadow .4s; position:relative; overflow:hidden;
-}
-.btn-sub::before {
-content:’’; position:absolute;
-top:0; left:-100%; width:100%; height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
-transition:left .5s;
-}
-.btn-sub:hover::before { left:100%; }
-.btn-sub:hover { box-shadow:0 0 60px rgba(200,16,46,0.75); }
-
-.suc {
-display:none; margin-top:18px; padding:28px;
-background:#0D0000; border:1px solid #C8102E; text-align:center;
-}
-.suc.on { display:block; }
-.suc p { font-family:‘Playfair Display’,serif; font-size:18px; color:#D4AF37; }
-
-/* PANEL INFO */
-.info-col { display:flex; flex-direction:column; gap:26px; }
-.icard {
-background:#080808;
-border:1px solid rgba(212,175,55,0.1);
-border-left:3px solid #C8102E;
-padding:26px 22px;
-}
-.ic-ico { font-size:26px; margin-bottom:10px; }
-.ic-t { font-family:‘Playfair Display’,serif; font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:8px; }
-.ic-p { font-size:13px; color:rgba(255,255,255,0.72); line-height:1.75; }
-
-.steps { }
-.step { display:flex; gap:18px; margin-bottom:22px; align-items:flex-start; }
-.sn {
-width:36px; height:36px; flex-shrink:0;
-border:1px solid #C8102E; color:#FF4455;
-font-family:‘Playfair Display’,serif; font-size:16px; font-weight:700;
-display:flex; align-items:center; justify-content:center;
-}
-.sb { font-size:13px; color:rgba(255,255,255,0.75); line-height:1.65; }
-.sb strong { display:block; color:#FFFFFF; font-weight:700; margin-bottom:3px; }
-
-/* ══════════════════════════════════════
-CONTACT
-══════════════════════════════════════ */
-.contact-grid {
-display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:2px; max-width:1100px; margin:60px auto 0;
-}
-.cc {
-background:#0C0C0C;
-border:1px solid rgba(212,175,55,0.1);
-padding:50px 34px; text-align:center;
-transition:transform .4s, border-color .4s;
-position:relative; overflow:hidden;
-}
-.cc::before {
-content:’’; position:absolute; inset:0;
-background:radial-gradient(circle at 50% 0%, rgba(200,16,46,0.1), transparent 55%);
-opacity:0; transition:opacity .4s;
-}
-.cc:hover { transform:translateY(-6px); border-color:rgba(212,175,55,0.3); }
-.cc:hover::before { opacity:1; }
-.cc-ico { font-size:36px; margin-bottom:18px; }
-.cc-lbl { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#D4AF37; margin-bottom:8px; }
-.cc-val { font-family:‘Playfair Display’,serif; font-size:17px; color:#FFFFFF; margin-bottom:22px; }
-.btn-c {
-display:inline-block; padding:13px 30px;
-font-family:‘Montserrat’,sans-serif; font-size:10px;
-letter-spacing:2px; text-transform:uppercase; font-weight:700;
-text-decoration:none; transition:all .3s; cursor:pointer; border:none;
-}
-.c-wa  { background:#128C7E; color:#FFFFFF; border:1px solid #25D366; }
-.c-wa:hover  { background:#25D366; box-shadow:0 0 30px rgba(37,211,102,0.4); }
-.c-or  { background:transparent; color:#D4AF37; border:1px solid #D4AF37; }
-.c-or:hover  { background:rgba(212,175,55,0.1); box-shadow:0 0 20px rgba(212,175,55,0.3); }
-.c-rd  { background:linear-gradient(135deg,#C8102E,#8B0010); color:#FFFFFF; border:1px solid #C8102E; }
-.c-rd:hover  { box-shadow:0 0 30px rgba(200,16,46,0.55); }
-
-/* ══════════════════════════════════════
-FOOTER
-══════════════════════════════════════ */
-footer {
-background:#000000;
-border-top:1px solid rgba(212,175,55,0.2);
-padding:60px 6% 30px;
-}
-.ft-top {
-display:flex; justify-content:space-between;
-flex-wrap:wrap; gap:36px;
-padding-bottom:36px;
-border-bottom:1px solid rgba(255,255,255,0.06);
-}
-.ft-nm { font-family:‘Playfair Display’,serif; font-size:30px; font-weight:900; color:#FFFFFF; }
-.ft-nm span { color:#D4AF37; }
-.ft-tag { font-family:‘Cormorant Garamond’,serif; font-size:15px; color:rgba(255,255,255,0.55); margin-top:8px; max-width:275px; }
-.ft-col h4 { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#D4AF37; margin-bottom:18px; }
-.ft-col a { display:block; color:rgba(255,255,255,0.58); text-decoration:none; font-size:13px; margin-bottom:10px; transition:color .3s; }
-.ft-col a:hover { color:#D4AF37; }
-.ft-bot {
-display:flex; justify-content:space-between; align-items:center;
-flex-wrap:wrap; gap:16px; padding-top:26px;
-}
-.ft-copy { font-size:11px; color:rgba(255,255,255,0.42); letter-spacing:1px; }
-.ft-copy span { color:#D4AF37; }
-.ft-credit { font-size:11px; color:rgba(255,255,255,0.28); font-style:italic; }
-.ft-credit span { color:rgba(212,175,55,0.65); }
-
-/* ══════════════════════════════════════
-REVEAL SCROLL
-══════════════════════════════════════ */
-.rev { opacity:0; transform:translateY(30px); transition:opacity .8s ease, transform .8s ease; }
-.rev.on { opacity:1; transform:translateY(0); }
-
-/* ══════════════════════════════════════
-ANIMATIONS
-══════════════════════════════════════ */
-@keyframes goUp   { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-@keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.25} }
-@keyframes scrollPulse { 0%,100%{opacity:.3;height:26px} 50%{opacity:1;height:44px} }
-
-/* ══════════════════════════════════════
-RESPONSIVE
-══════════════════════════════════════ */
-@media(max-width:860px){
-nav a:not(.nav-btn){ display:none; }
-.resa-grid{ grid-template-columns:1fr; gap:40px; }
-.fg2{ grid-template-columns:1fr; }
-.cal-clock{ grid-template-columns:1fr; }
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav a:not(.nav-btn):not(.nav-espace){display:none;}
+  .resa-grid{grid-template-columns:1fr;gap:40px;}
+  .fg2{grid-template-columns:1fr;}
+  .cal-clock{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .stat{border-bottom:1px solid var(--border);}
+  .tc{min-width:100%;}
+  .adm-stats{grid-template-columns:1fr 1fr;}
+  .adm-gal-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-inner{padding-left:20px;}
+  .hero-vline{display:none;}
+  .order-row{grid-template-columns:1fr;}
 }
 </style>
-
 </head>
 <body>
 
 <!-- LOADER -->
-
 <div id="loader">
-  <div class="ld-title" style="color:#D4AF37">Zoé <span>Studio</span></div>
-  <div class="ld-sub">Production Visuelle de Prestige</div>
-  <div class="ld-bar"><div class="ld-progress"></div></div>
+  <div class="ld-z">Z</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+  <div class="ld-sub">Zoé Studio</div>
+  <div class="ld-sub">Production Visuelle</div>
 </div>
 
-<!-- CANVAS -->
-
-<canvas id="canvas-bg"></canvas>
+<canvas id="cvs"></canvas>
 
 <!-- HEADER -->
-
-<header>
+<header id="hdr">
   <div class="logo-zone">
     <div class="logo-ring">
-      <!-- ✏️ LOGO : remplace src="" par ton fichier, ex: src="logo.png" -->
-      <img src="logo.jpeg" alt="Logo Zoé Studio" style="display:block" onerror="this.style.display='none';document.querySelector('.logo-z').style.display='block'">
-      <span class="logo-z" style="display:none">Z</span>
+      <img src="logo.jpeg" alt="Zoé Studio" onerror="this.style.display='none';document.querySelector('.lz').style.display='flex';">
+      <span class="lz">Z</span>
     </div>
-    <div class="brand">
-      <div class="brand-name" style="color:#D4AF37">Zoé <span>Studio</span></div>
-      <div class="brand-sub" style="color:#FFFFFF">Production Visuelle de Prestige</div>
+    <div>
+      <div class="brand-name">Zoé Studio</div>
+      <div class="brand-sub">Production Visuelle</div>
     </div>
   </div>
   <nav>
     <a href="#services">Services</a>
-    <a href="#reservation">Réserver</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#temoignages">Avis</a>
     <a href="#contact">Contact</a>
-    <a href="#reservation" class="nav-btn">Réserver maintenant</a>
+    <a href="#" class="nav-espace" onclick="openClientLogin(event)">Mon espace</a>
+    <a href="#reservation" class="nav-btn">Réserver</a>
   </nav>
 </header>
 
-<!-- ██ HERO ██ -->
-
+<!-- HERO -->
 <section id="hero">
-  <div class="hero-glow"></div>
+  <div class="hero-vline"></div>
+  <div class="hero-bg-z">ZOÉ</div>
   <div class="hero-inner">
-    <p class="hero-top">&#10022; Production Vidéo &amp; montage Premium &#10022;</p>
+    <div class="hero-eye"><div class="hl"></div><span>Production Vidéo &amp; Montage Premium</span></div>
     <h1 class="hero-h1">
       <span class="l1">Votre Histoire</span>
       <span class="l2">Immortalisée</span>
-      <span class="l3">&#10022; Par Zoé Studio &#10022;</span>
+      <span class="l3">— Par Zoé Studio —</span>
     </h1>
-    <p class="hero-p">Vlogs, publicités, soutenances, mariages, baptêmes, anniversaires   nous capturons chaque moment avec l'excellence qu'il mérite.</p>
+    <p class="hero-p">Dans 10 ans, vous ne vous souviendrez pas de tout.<br>Mais la vidéo, elle, n'oubliera rien.</p>
     <div class="hero-ctas">
-      <a href="#reservation" class="cta-red">Réserver une session</a>
-      <a href="#services" class="cta-gold">Découvrir nos services</a>
+      <a href="#reservation" class="btn-dark">Réserver une session</a>
+      <a href="#galerie" class="btn-outline">Nos réalisations</a>
+      <a href="https://wa.me/212777822868?text=Bonjour%20Zo%C3%A9%20Studio" target="_blank" class="btn-wa">💬 WhatsApp</a>
     </div>
   </div>
-  <div class="hero-foot">
-    <div class="badges">
-      <div class="badge"><span class="dot"></span> En activité &bull; Tanger</div>
-      <div class="badge"><span class="dot"></span> Réservez votre date dès maintenant</div>
-    </div>
-    <div class="scroll-arr">
-      <span>Défiler</span>
-      <div class="scroll-line"></div>
-    </div>
+  <div class="hero-scroll"><span>Défiler</span><div class="sc-track"></div></div>
+</section>
+
+<div class="div"></div>
+
+<!-- STATS -->
+<section class="sec" style="padding-top:60px;padding-bottom:60px;">
+  <div class="stats-row">
+    <div class="stat rev"><span class="stat-n" id="s1">0<sup>+</sup></span><span class="stat-l">Projets réalisés</span></div>
+    <div class="stat rev"><span class="stat-n" id="s2">0<sup>+</sup></span><span class="stat-l">Clients satisfaits</span></div>
+    <div class="stat rev"><span class="stat-n" id="s3">0<sup>+</sup></span><span class="stat-l">Projets filmés</span></div>
+    <div class="stat rev"><span class="stat-n" id="s4">0<sup>%</sup></span><span class="stat-l">Satisfaction client</span></div>
   </div>
 </section>
 
-<div class="div-or"><div class="line"></div><div class="dia"></div><div class="line"></div></div>
+<div class="div"></div>
 
-<!-- ██ SERVICES ██ -->
-
-<section id="services" class="sec-wrap">
-  <div class="sec-head rev">
-    <span class="sec-eye">&#10022; Notre Portfolio de Services &#10022;</span>
-    <h2 class="sec-h">Ce que nous <em>créons</em></h2>
-  </div>
-  <div class="grid-svc">
-    <div class="svc rev"><span class="svc-ico">&#127916;</span><div class="svc-nm">Vlog &amp; Contenu Digital</div><p class="svc-tx">Vlogs professionnels et contenu réseaux sociaux capté avec expertise cinématographique.</p><span class="svc-tag">Digital Content</span></div>
-    <div class="svc rev"><span class="svc-ico">&#128250;</span><div class="svc-nm">Publicité &amp; Spot Comm.</div><p class="svc-tx">Spots publicitaires percutants conçus pour captiver et convertir votre audience cible.</p><span class="svc-tag">Advertising</span></div>
-    <div class="svc rev"><span class="svc-ico">&#127891;</span><div class="svc-nm">Soutenance &amp; Académique</div><p class="svc-tx">Captation professionnelle de soutenances, conférences et événements académiques.</p><span class="svc-tag">Académique</span></div>
-    <div class="svc rev"><span class="svc-ico">&#128141;</span><div class="svc-nm">Mariages &amp; Cérémonies</div><p class="svc-tx">Films de mariage d'exception. Chaque regard, chaque émotion capturés pour l'éternité.</p><span class="svc-tag">Mariage</span></div>
-    <div class="svc rev"><span class="svc-ico">&#128052;</span><div class="svc-nm">Baptêmes &amp; Naissances</div><p class="svc-tx">Les premiers instants de votre enfant filmés avec tendresse et savoir-faire exceptionnel.</p><span class="svc-tag">Famille</span></div>
-    <div class="svc rev"><span class="svc-ico">&#127874;</span><div class="svc-nm">Anniversaires &amp; Fêtes</div><p class="svc-tx">Sweet 16, 18 ans, 50 ans — chaque célébration transformée en souvenir inoubliable.</p><span class="svc-tag">Célébration</span></div>
-    <div class="svc rev"><span class="svc-ico">&#9917;</span><div class="svc-nm">Récap Activités &amp; Sports</div><p class="svc-tx">Tournois, événements sportifs, sorties de groupe — des récaps dynamiques et énergiques.</p><span class="svc-tag">Sport &amp; Activités</span></div>
-    <div class="svc rev"><span class="svc-ico">&#10024;</span><div class="svc-nm">Sur Mesure &amp; Exclusif</div><p class="svc-tx">Clips, présentations corporate, aftermovies — votre vision unique, notre expertise absolue.</p><span class="svc-tag">Custom</span></div>
+<!-- SERVICES -->
+<section id="services" class="sec-d">
+  <div class="ey rev"><div class="el"></div><span>Notre portfolio</span></div>
+  <h2 class="st rev">Ce que nous <em>créons</em></h2>
+  <div class="svc-grid">
+    <div class="svc rev"><span class="svc-i">🎬</span><div class="svc-n">Vlog &amp; Contenu Digital</div><p class="svc-t">Vlogs professionnels et contenu réseaux sociaux capté avec expertise cinématographique.</p><div class="svc-tag">Digital</div></div>
+    <div class="svc rev"><span class="svc-i">📺</span><div class="svc-n">Publicité &amp; Spot</div><p class="svc-t">Spots publicitaires percutants conçus pour captiver et convertir votre audience cible.</p><div class="svc-tag">Advertising</div></div>
+    <div class="svc rev"><span class="svc-i">🎓</span><div class="svc-n">Soutenance &amp; Académique</div><p class="svc-t">Captation professionnelle de soutenances, conférences et événements académiques.</p><div class="svc-tag">Académique</div></div>
+    <div class="svc rev"><span class="svc-i">💍</span><div class="svc-n">Mariages &amp; Cérémonies</div><p class="svc-t">Films de mariage d'exception. Chaque regard, chaque émotion capturés pour l'éternité.</p><div class="svc-tag">Mariage</div></div>
+    <div class="svc rev"><span class="svc-i">🍼</span><div class="svc-n">Baptêmes &amp; Naissances</div><p class="svc-t">Les premiers instants de votre enfant filmés avec tendresse et savoir-faire.</p><div class="svc-tag">Famille</div></div>
+    <div class="svc rev"><span class="svc-i">🎂</span><div class="svc-n">Anniversaires &amp; Fêtes</div><p class="svc-t">Sweet 16, 18 ans, 50 ans — chaque célébration transformée en souvenir inoubliable.</p><div class="svc-tag">Célébration</div></div>
+    <div class="svc rev"><span class="svc-i">⚽</span><div class="svc-n">Récap Activités &amp; Sports</div><p class="svc-t">Tournois, événements sportifs, sorties — des récaps dynamiques et énergiques.</p><div class="svc-tag">Sport</div></div>
+    <div class="svc rev"><span class="svc-i">✨</span><div class="svc-n">Sur Mesure &amp; Exclusif</div><p class="svc-t">Clips, corporate, aftermovies — votre vision unique, notre expertise absolue.</p><div class="svc-tag">Custom</div></div>
   </div>
 </section>
 
-<div class="div-or"><div class="line"></div><div class="dia"></div><div class="line"></div></div>
+<div class="div"></div>
 
-<!-- ██ RESERVATION ██ -->
-
-<section id="reservation" class="sec-wrap-alt">
-  <div class="sec-head rev">
-    <span class="sec-eye">&#10022; Formulaire de Réservation &#10022;</span>
-    <h2 class="sec-h">Réservez votre <em>session</em></h2>
+<!-- GALERIE -->
+<section id="galerie" class="sec">
+  <div class="ey rev"><div class="el"></div><span>Nos réalisations</span></div>
+  <h2 class="st rev">Ce que nous avons <em>créé</em></h2>
+  <div class="gf-row rev">
+    <button class="gf on" data-cat="all">Tout</button>
+    <button class="gf" data-cat="mariage">Mariage</button>
+    <button class="gf" data-cat="evenement">Événement</button>
+    <button class="gf" data-cat="pub">Publicité</button>
+    <button class="gf" data-cat="sport">Sport</button>
   </div>
+  <div class="gal-grid" id="gal-grid">
+    <div class="gal-empty" id="gal-empty">Aucune réalisation publiée pour le moment.</div>
+  </div>
+</section>
 
+<div id="lb"><div class="lb-in"><button class="lb-x" onclick="closeLB()">✕</button><img id="lb-img" src="" alt="" style="display:none"><video id="lb-vid" controls style="display:none"></video><div class="lb-cap" id="lb-cap"></div></div></div>
+
+<div class="div"></div>
+
+<!-- TEMOIGNAGES -->
+<section id="temoignages" class="sec-d">
+  <div class="ey rev"><div class="el"></div><span>Ce que disent nos clients</span></div>
+  <h2 class="st rev">Ils nous font <em>confiance</em></h2>
+  <div class="temo-outer rev">
+    <div class="temo-track" id="tt">
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">Zoé Studio a fait un travail au-delà de nos espérances. Chaque regard, chaque larme immortalisé avec une sensibilité rare.</p><div class="tc-sep"></div><div class="tc-nm">Awa Lucie</div><div class="tc-ev">Recap Activité réligieux · Tanger 2026</div></div>
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">Pour notre spot publicitaire, Zoé Studio a livré un résultat digne des grandes agences. Professionnalisme et réactivité au rendez-vous.</p><div class="tc-sep"></div><div class="tc-nm">Barack</div><div class="tc-ev">Publicité · 2026</div></div>
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">La captation de ma soutenance était impeccable. Cadrage parfait, son cristallin. Toute ma famille a pu suivre à distance.</p><div class="tc-sep"></div><div class="tc-nm">Dr. Fatima R.</div><div class="tc-ev">Soutenance · 2025</div></div>
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">L'anniversaire de ma fille est devenu un vrai film. Montage livré en 48h avec une musique parfaitement choisie. Merci !</p><div class="tc-sep"></div><div class="tc-nm">Nadia M.</div><div class="tc-ev">Anniversaire · Tanger 2026</div></div>
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">Notre récap de tournoi était exactement ce qu'on cherchait — dynamique, rythmé, avec des angles qu'on ne voit nulle part ailleurs.</p><div class="tc-sep"></div><div class="tc-nm">Yassine K.</div><div class="tc-ev">Sport · 2025</div></div>
+      <div class="tc"><div class="tc-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="tc-q">Le baptême de notre fils filmé par Zoé Studio — un souvenir pour la vie. On replonge dans cette journée magique à chaque visionnage.</p><div class="tc-sep"></div><div class="tc-nm">Houda &amp; Rachid</div><div class="tc-ev">Baptême · 2024</div></div>
+    </div>
+  </div>
+  <div class="t-nav rev"><button class="t-btn" id="tp">←</button><button class="t-btn" id="tn">→</button><div class="t-dots" id="tdots"></div></div>
+</section>
+
+<div class="div"></div>
+
+<!-- FAQ -->
+<section id="faq" class="sec">
+  <div class="ey rev"><div class="el"></div><span>Questions fréquentes</span></div>
+  <h2 class="st rev">Tout ce que vous voulez <em>savoir</em></h2>
+  <div class="faq-w">
+    <div class="fi-item rev"><button class="fq" onclick="tFaq(this)">Combien de temps avant faut-il réserver ?<span class="fi-ico">+</span></button><div class="fa"><p>3 Jours minimum pour les petits projets, 4 à 8 Jours pour les mariages. Nous faisons notre possible pour les demandes urgentes via WhatsApp.</p></div></div>
+    <div class="fi-item rev"><button class="fq" onclick="tFaq(this)">Sous quel délai je reçois ma vidéo ?<span class="fi-ico">+</span></button><div class="fa"><p>48 à 72h pour les événements standards. 5 à 10 jours pour les événements que vous personnalisés. Votre fichier sera téléchargeable depuis votre espace client.</p></div></div>
+    <div class="fi-item rev"><button class="fq" onclick="tFaq(this)">Proposez-vous la photographie aussi ?<span class="fi-ico">+</span></button><div class="fa"><p>Oui, en partenariat avec Racine_Photographique pour un package complet vidéo + photo.</p></div></div>
+    <div class="fi-item rev"><button class="fq" onclick="tFaq(this)">Dans quelles villes intervenez-vous ?<span class="fi-ico">+</span></button><div class="fa"><p>Basés à Tanger, nous intervenons partout au Maroc. Des frais peuvent s'appliquer hors région Tanger-Tétouan.</p></div></div>
+    <div class="fi-item rev"><button class="fq" onclick="tFaq(this)">Comment se passe le paiement ?<span class="fi-ico">+</span></button><div class="fa"><p>Solde le jour J ou à la livraison. Virements, cash et paiements mobiles acceptés.</p></div></div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- RESERVATION -->
+<section id="reservation" class="sec-d">
+  <div class="ey rev"><div class="el"></div><span>Formulaire de réservation</span></div>
+  <h2 class="st rev">Réservez votre <em>session</em></h2>
   <div class="resa-grid">
-    <!-- FORMULAIRE -->
     <div class="rev">
-      <!-- ✏️ REMPLACE access_key par ta clé Web3Forms -->
-      <form id="form" action="https://api.web3forms.com/submit" method="POST" onsubmit="doSubmit(event)">
-        <input type="hidden" name="access_key" value="40008284-53ab-4aea-ab6c-84769b2a4a44">
-        <input type="hidden" name="subject" value="Nouvelle Réservation — Zoé Studio">
-        <input type="hidden" name="from_name" value="Zoé Studio Réservations">
-        <input type="hidden" id="f-date"  name="date_evenement"  value="">
-        <input type="hidden" id="f-heure" name="heure_evenement" value="">
-
-    <div class="fg">
-      <label class="fl">Nom complet *</label>
-      <input type="text" class="fi" name="nom" placeholder="Votre nom complet" required>
-    </div>
-    <div class="fg2">
-      <div class="fg">
-        <label class="fl">Téléphone *</label>
-        <input type="tel" class="fi" name="telephone" placeholder="+212 6XX XXX XXX" required>
-      </div>
-      <div class="fg">
-        <label class="fl">Email *</label>
-        <input type="email" class="fi" name="email" placeholder="votre@email.com" required>
-      </div>
-    </div>
-
-    <div class="fg">
-      <label class="fl">Type de service *</label>
-      <select class="fs" name="service" required>
-        <option value="" disabled selected>Sélectionnez un service</option>
-        <option>Vlog &amp; Contenu Digital</option>
-        <option>Publicité &amp; Spot Commercial</option>
-        <option>Soutenance / Académique</option>
-        <option>Mariage &amp; Cérémonie</option>
-        <option>Baptême &amp; Naissance</option>
-        <option>Anniversaire &amp; Fête</option>
-        <option>Récap Activités / Sport</option>
-        <option>Autre / Sur Mesure</option>
-      </select>
-    </div>
-
-    <!-- CALENDRIER + HORLOGE -->
-    <div class="fg">
-      <label class="fl">Date &amp; Heure de l'événement *</label>
-      <div class="cal-clock">
-        <!-- CALENDRIER -->
-        <div class="cal-box">
-          <div class="cal-head">
-            <button type="button" class="cal-nav" id="cal-prev">&#8249;</button>
-            <div class="cal-my" id="cal-title">—</div>
-            <button type="button" class="cal-nav" id="cal-next">&#8250;</button>
-          </div>
-          <div class="cal-wk">
-            <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
-          </div>
-          <div class="cal-g" id="cal-g"></div>
-          <div class="cal-picked" id="cal-picked">— Choisissez une date —</div>
+      <form id="form" onsubmit="doSubmit(event)">
+        <div class="fg"><label class="fl">Nom *</label><input type="text" class="fi" id="f-nom" placeholder="Votre nom complet" required></div>
+        <div class="fg2">
+          <div class="fg"><label class="fl">Téléphone *</label><input type="tel" class="fi" id="f-tel" placeholder="+212 6XX XXX XXX" required></div>
+          <div class="fg"><label class="fl">Email *</label><input type="email" class="fi" id="f-email" placeholder="votre@email.com" required></div>
         </div>
-        <!-- HORLOGE -->
-        <div class="clk-box">
-          <div class="clk-lbl">Heure de début</div>
-          <div class="clk-face" id="clk-face">
-            <div class="clk-center"></div>
-            <div class="hand h-h" id="hH"></div>
-            <div class="hand h-m" id="hM"></div>
-            <div class="hand h-s" id="hS"></div>
-          </div>
-          <div class="clk-sel-row">
-            <select class="t-sel" id="sel-h" onchange="syncClk()"></select>
-            <span class="t-sep">:</span>
-            <select class="t-sel" id="sel-m" onchange="syncClk()"></select>
+        <div class="fg"><label class="fl">Type de service *</label>
+          <select class="fs" id="f-service" required>
+            <option value="" disabled selected>Sélectionnez un service</option>
+            <option>Vlog &amp; Contenu Digital</option><option>Publicité &amp; Spot Commercial</option>
+            <option>Soutenance / Académique</option><option>Mariage &amp; Cérémonie</option>
+            <option>Baptême &amp; Naissance</option><option>Anniversaire &amp; Fête</option>
+            <option>Récap Activités / Sport</option><option>Autre / Sur Mesure</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Date &amp; Heure *</label>
+          <div class="cal-clock">
+            <div class="cal-box">
+              <div class="cal-head"><button type="button" class="cal-nav" id="cal-prev">‹</button><div class="cal-my" id="cal-title">—</div><button type="button" class="cal-nav" id="cal-next">›</button></div>
+              <div class="cal-wk"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
+              <div class="cal-g" id="cal-g"></div>
+              <div class="cal-p" id="cal-p">— Choisissez une date —</div>
+            </div>
+            <div class="clk-box">
+              <div class="clk-lbl">Heure de début</div>
+              <div class="clk-face" id="clk-face"><div class="clk-c"></div><div class="hand h-h" id="hH"></div><div class="hand h-m" id="hM"></div><div class="hand h-s" id="hS"></div></div>
+              <div class="clk-sel"><select class="t-sel" id="sel-h" onchange="syncClk()"></select><span class="t-sep">:</span><select class="t-sel" id="sel-m" onchange="syncClk()"></select></div>
+            </div>
           </div>
         </div>
+        <div class="fg"><label class="fl">Lieu *</label><input type="text" class="fi" id="f-lieu" placeholder="Adresse, salle, ville..." required></div>
+        <div class="fg2">
+          <div class="fg"><label class="fl">Nombre de jours</label><select class="fs" id="f-jours"><option>1 jour</option><option>2 jours</option><option>3 jours</option><option>4 jours</option><option>5 jours ou plus</option></select></div>
+          <div class="fg"><label class="fl">Budget estimatif</label><select class="fs" id="f-budget"><option value="">À discuter</option><option>200 MAD</option><option>200–350 MAD</option><option>350–400 MAD</option><option>400–1500 MAD</option><option>Plus de 1500 MAD</option></select></div>
+        </div>
+        <div class="fg"><label class="fl">Vos attentes &amp; vision *</label><textarea class="ft" id="f-attentes" placeholder="Décrivez votre événement, le style souhaité, les livrables attendus..." required></textarea></div>
+        <button type="submit" class="btn-sub" id="btn-sub">Envoyer ma demande de réservation</button>
+        <div class="suc-box" id="suc"><p>✦ Demande envoyée ! Connectez-vous à "Mon espace" pour suivre votre commande et échanger avec nous. ✦</p></div>
+      </form>
+    </div>
+    <div class="info-col rev">
+      <div><span class="ic-sub">Pourquoi nous</span><div class="ic-t">Zoé Studio</div><p class="ic-p">Une équipe passionnée, des logiciels de pointe, et une vision artistique unique. Chaque événement devient un chef-d'œuvre visuel.</p></div>
+      <div><span class="ic-sub">Réactivité</span><div class="ic-t">Réponse sous 24h</div><p class="ic-p">Dès réception, nous vous recontactons pour affiner les détails et établir un devis personnalisé.</p></div>
+      <div>
+        <span class="ic-sub" style="margin-bottom:14px;display:block;">Notre processus</span>
+        <div class="step"><div class="sn">1</div><div class="sb"><strong>Réservation en ligne</strong>Remplissez le formulaire</div></div>
+        <div class="step"><div class="sn">2</div><div class="sb"><strong>Consultation gratuite</strong>Échange pour affiner votre vision</div></div>
+        <div class="step"><div class="sn">3</div><div class="sb"><strong>Devis &amp; Contrat</strong>Proposition claire, sans surprise</div></div>
+        <div class="step"><div class="sn">4</div><div class="sb"><strong>Jour J — Tournage</strong>Notre équipe se déploie</div></div>
+        <div class="step"><div class="sn">5</div><div class="sb"><strong>Livraison Premium</strong>Téléchargeable dans votre espace</div></div>
       </div>
     </div>
-
-    <div class="fg">
-      <label class="fl">Lieu de l'événement *</label>
-      <input type="text" class="fi" name="lieu" placeholder="Adresse, salle, ville..." required>
-    </div>
-    <div class="fg2">
-      <div class="fg">
-        <label class="fl">Nombre de jours</label>
-        <select class="fs" name="nb_jours">
-          <option>1 jour</option><option>2 jours</option><option>3 jours</option>
-          <option>4 jours</option><option>5 jours ou plus</option>
-        </select>
-      </div>
-      <div class="fg">
-        <label class="fl">Nombre de personnes</label>
-        <input type="number" class="fi" name="nb_personnes" placeholder="Estimatif" min="1">
-      </div>
-    </div>
-    <div class="fg">
-      <label class="fl">Budget estimatif</label>
-      <select class="fs" name="budget">
-        <option value="" disabled selected>Votre budget</option>
-        <option>200 MAD</option><option>200 – 350 MAD</option>
-        <option>350 – 400 MAD</option><option>400 – 1 500 MAD</option>
-        <option>Plus de 1 500 MAD</option><option>À discuter</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label class="fl">Vos attentes &amp; vision *</label>
-      <textarea class="ft" name="attentes" placeholder="Décrivez votre événement, le style souhaité, les moments clés, les livrables attendus (vidéo, montage, photos (avec Racine_Photographique)..." required></textarea>
-    </div>
-    <div class="fg">
-      <label class="fl">Comment nous avez-vous connus ?</label>
-      <select class="fs" name="source">
-        <option value="" disabled selected>Sélectionnez</option>
-        <option>Instagram / Réseaux sociaux</option>
-        <option>Recommandation d'un proche</option>
-        <option>Recherche Google</option>
-        <option>Événement précédent</option>
-        <option>Autre</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn-sub" id="btn-sub">&#10022; &nbsp; Envoyer ma demande de réservation &nbsp; &#10022;</button>
-    <div class="suc" id="suc"><p>&#10022; Votre demande a bien été envoyée ! Nous vous contacterons dans les 24h. &#10022;</p></div>
-  </form>
-</div>
-
-<!-- PANEL INFO -->
-<div class="info-col rev">
-  <div class="icard">
-    <div class="ic-ico">&#127919;</div>
-    <div class="ic-t">Pourquoi Zoé Studio ?</div>
-    <p class="ic-p">Une équipe passionnée, des logiciel de pointe, et une vision artistique unique. Nous transformons chaque événement en chef-d'œuvre visuel digne des plus grandes productions.</p>
-  </div>
-  <div class="icard">
-    <div class="ic-ico">&#9889;</div>
-    <div class="ic-t">Réponse sous 24h</div>
-    <p class="ic-p">Dès réception de votre demande, notre équipe vous recontacte pour affiner les détails et établir un devis personnalisé. Réactivité garantie.</p>
-  </div>
-  <div>
-    <span class="sec-eye" style="margin-bottom:20px;display:block;">Notre processus</span>
-    <div class="steps">
-      <div class="step"><div class="sn">1</div><div class="sb"><strong>Réservation en ligne</strong>Remplissez le formulaire avec tous vos détails</div></div>
-      <div class="step"><div class="sn">2</div><div class="sb"><strong>Consultation gratuite</strong>Échange pour affiner votre vision</div></div>
-      <div class="step"><div class="sn">3</div><div class="sb"><strong>Devis &amp; Contrat</strong>Proposition claire, sans surprise</div></div>
-      <div class="step"><div class="sn">4</div><div class="sb"><strong>Jour J — Tournage</strong>Notre équipe se déploie, vous profitez</div></div>
-      <div class="step"><div class="sn">5</div><div class="sb"><strong>Livraison Premium</strong>Votre film monté, prêt à être partagé</div></div>
-    </div>
-  </div>
-</div>
-
   </div>
 </section>
 
-<div class="div-or"><div class="line"></div><div class="dia"></div><div class="line"></div></div>
+<div class="div"></div>
 
-<!-- ██ CONTACT ██ -->
-
-<section id="contact" class="sec-wrap">
-  <div class="sec-head rev">
-    <span class="sec-eye">&#10022; Nous Contacter &#10022;</span>
-    <h2 class="sec-h">Discutons de votre <em>projet</em></h2>
-  </div>
-  <div class="contact-grid">
-    <div class="cc rev">
-      <div class="cc-ico">&#128172;</div>
-      <div class="cc-lbl">WhatsApp Direct</div>
-      <div class="cc-val">Nous écrire maintenant</div>
-      <a href="https://wa.me/212777822868?text=Bonjour%20Zo%C3%A9%20Studio%2C%20je%20souhaite%20en%20savoir%20plus." target="_blank" class="btn-c c-wa">&#128172; &nbsp; Discuter sur WhatsApp</a>
-    </div>
-    <div class="cc rev">
-      <div class="cc-ico">&#128231;</div>
-      <div class="cc-lbl">Email professionnel</div>
-      <div class="cc-val">jauresulriche@gmail.com</div>
-      <a href="mailto:jauresulriche@gmail.com" class="btn-c c-or">Envoyer un email</a>
-    </div>
-    <div class="cc rev">
-      <div class="cc-ico">&#128222;</div>
-      <div class="cc-lbl">Téléphone</div>
-      <!-- ✏️ REMPLACE le numéro -->
-      <div class="cc-val">+212 777-822868</div>
-      <a href="tel:+212777822868" class="btn-c c-rd">Appeler maintenant</a>
-    </div>
-    
+<!-- CONTACT -->
+<section id="contact" class="sec">
+  <div class="ey rev"><div class="el"></div><span>Nous contacter</span></div>
+  <h2 class="st rev">Discutons de votre <em>projet</em></h2>
+  <div class="contact-row">
+    <div class="cc rev"><div class="cc-i">💬</div><div class="cc-l">WhatsApp</div><div class="cc-v">Nous écrire</div><a href="https://wa.me/212777822868?text=Bonjour%20Zo%C3%A9%20Studio" target="_blank" class="btn-c c-wa">WhatsApp</a></div>
+    <div class="cc rev"><div class="cc-i">✉️</div><div class="cc-l">Email</div><div class="cc-v">jauresulriche@gmail.com</div><a href="mailto:jauresulriche@gmail.com" class="btn-c c-g">Écrire</a></div>
+    <div class="cc rev"><div class="cc-i">📞</div><div class="cc-l">Téléphone</div><div class="cc-v">+212 777-822868</div><a href="tel:+212777822868" class="btn-c c-r">Appeler</a></div>
+    <div class="cc rev"><div class="cc-i">📍</div><div class="cc-l">Localisation</div><div class="cc-v">Tanger, Maroc</div><a href="#reservation" class="btn-c c-g">Réserver</a></div>
   </div>
 </section>
 
-<!-- ██ FOOTER ██ -->
-
+<!-- FOOTER -->
 <footer>
   <div class="ft-top">
     <div>
-      <div class="ft-nm"  style="color:#D4AF37">Zoé <span>Studio</span></div>
+      <div class="ft-nm">Zoé Studio</div>
       <p class="ft-tag">La production vidéo premium qui transforme vos moments en œuvres d'art intemporelles.</p>
+      <div style="margin-top:14px;">
+        <button style="background:transparent;border:1px solid rgba(196,160,82,.25);color:rgba(196,160,82,.6);padding:7px 16px;font-family:Montserrat,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;" onclick="openClientLogin(event)" onmouseover="this.style.color='var(--gold3)';this.style.borderColor='rgba(196,160,82,.5)'" onmouseout="this.style.color='rgba(196,160,82,.6)';this.style.borderColor='rgba(196,160,82,.25)'">Mon espace client</button>
+      </div>
     </div>
-    <div class="ft-col">
-      <h4>Navigation</h4>
-      <a href="#hero">Accueil</a><a href="#services">Nos Services</a>
-      <a href="#reservation">Réserver</a><a href="#contact">Contact</a>
-    </div>
-    <div class="ft-col">
-      <h4>Services</h4>
-      <a href="#reservation">Mariage &amp; Cérémonie</a>
-      <a href="#reservation">Publicité &amp; Spot</a>
-      <a href="#reservation">Vlog &amp; Digital</a>
-      <a href="#reservation">Événements</a>
-    </div>
-    <div class="ft-col">
-      <h4>Légal</h4>
-      <a href="#">Conditions générales</a>
-      <a href="#">Confidentialité</a>
-      <a href="#">Mentions légales</a>
-    </div>
+    <div class="ft-col"><h4>Navigation</h4><a href="#hero">Accueil</a><a href="#services">Services</a><a href="#galerie">Galerie</a><a href="#temoignages">Témoignages</a><a href="#faq">FAQ</a><a href="#contact">Contact</a></div>
+    <div class="ft-col"><h4>Services</h4><a href="#reservation">Mariage &amp; Cérémonie</a><a href="#reservation">Publicité &amp; Spot</a><a href="#reservation">Vlog &amp; Digital</a><a href="#reservation">Événements</a></div>
+    <div class="ft-col"><h4>Légal</h4><a href="#">Conditions générales</a><a href="#">Confidentialité</a><a href="#">Mentions légales</a></div>
   </div>
   <div class="ft-bot">
     <div class="ft-copy">© 2026 <span>Zoé Studio</span> — Tous droits réservés</div>
-    <div class="ft-credit">Site web développé par <span>Jaurès Yomi</span></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="ft-credit">Développé par <span>Jaurès Yomi</span></div>
+      <span id="secret-zone" onclick="secretClick()" style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.04);display:inline-block;" title=""></span>
+    </div>
   </div>
 </footer>
 
+<!-- MODALS -->
+<div class="modal" id="m-login">
+  <div class="mbox">
+    <button class="mcl" onclick="closeModal('m-login')">✕</button>
+    <div class="mlogo">Zoé Studio</div>
+    <div class="msub">Mon espace personnel</div>
+    <input type="email" class="minput" id="cl-email" placeholder="Votre email">
+    <input type="password" class="minput" id="cl-pwd" placeholder="Votre mot de passe" onkeydown="if(event.key==='Enter')clientLogin()">
+    <div class="merr" id="cl-err">Email ou mot de passe incorrect.</div>
+    <button class="mbtn" onclick="clientLogin()">Se connecter</button>
+    <span class="mlink" onclick="openRegister()">Créer mon compte</span>
+  </div>
+</div>
+
+<div class="modal" id="m-register">
+  <div class="mbox">
+    <button class="mcl" onclick="closeModal('m-register')">✕</button>
+    <div class="mlogo">Zoé Studio</div>
+    <div class="msub">Créer mon compte</div>
+    <input type="text"     class="minput" id="rg-nom"   placeholder="Votre nom complet">
+    <input type="email"    class="minput" id="rg-email" placeholder="Votre email">
+    <input type="password" class="minput" id="rg-pwd"   placeholder="Mot de passe (6 caractères min)" onkeydown="if(event.key==='Enter')clientRegister()">
+    <div class="merr" id="rg-err">Erreur lors de la création du compte.</div>
+    <button class="mbtn" onclick="clientRegister()">Créer mon compte</button>
+    <span class="mlink" onclick="openClientLogin(null)">Déjà un compte ? Se connecter</span>
+  </div>
+</div>
+
+<div class="modal" id="m-admin">
+  <div class="mbox">
+    <button class="mcl" onclick="closeModal('m-admin')">✕</button>
+    <div class="mlogo" style="font-size:20px;">Administration</div>
+    <div class="msub">Accès restreint</div>
+    <input type="password" class="minput" id="adm-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <div class="merr" id="adm-err">Mot de passe incorrect.</div>
+    <button class="mbtn" onclick="checkAdmin()">Accéder</button>
+  </div>
+</div>
+
+<!-- ESPACE CLIENT -->
+<div id="client-dash">
+  <div class="cd-hdr">
+    <div class="cd-logo">Zoé Studio — Mon Espace</div>
+    <div class="cd-user">
+      <div class="cd-email" id="cd-email-disp"></div>
+      <button class="cd-logout" onclick="logoutClient()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="cd-tabs">
+    <div class="cd-tab on"  onclick="cdTab('p-dash',this)">Tableau de bord</div>
+    <div class="cd-tab"     onclick="cdTab('p-orders',this)">Mes réservations</div>
+    <div class="cd-tab"     onclick="cdTab('p-delivs',this)">Mes livrables</div>
+    <div class="cd-tab"     onclick="cdTab('p-chat',this)" id="chat-tab">Chat avec Zoé Studio</div>
+  </div>
+  <div class="cd-body">
+    <div class="cd-pane on" id="p-dash">
+      <div class="cd-welcome" id="cd-welcome">Bonjour !</div>
+      <div class="cd-welsub">Bienvenue dans votre espace personnel Zoé Studio</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;" id="dash-sum"></div>
+    </div>
+    <div class="cd-pane" id="p-orders">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:20px;">Mes réservations</div>
+      <div id="cl-orders"></div>
+    </div>
+    <div class="cd-pane" id="p-delivs">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px;">Mes livrables</div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text2);margin-bottom:20px;">Vos vidéos et montages finalisés, prêts à être téléchargés.</p>
+      <div id="cl-delivs"></div>
+    </div>
+    <div class="cd-pane" id="p-chat">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:16px;">Chat avec Zoé Studio</div>
+      <div class="chat-wrap">
+        <div class="chat-hdr"><div class="chat-dot"></div><div><div class="chat-title">Zoé Studio</div><div class="chat-sub">Production Visuelle · Tanger</div></div></div>
+        <div class="chat-msgs" id="chat-msgs"><div class="chat-empty">Aucun message. Envoyez un message à l'équipe !</div></div>
+        <div class="chat-input-row">
+          <input type="text" class="chat-inp" id="chat-inp" placeholder="Votre message..." onkeydown="if(event.key==='Enter')sendClientMsg()">
+          <button class="chat-send" onclick="sendClientMsg()">Envoyer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD ADMIN -->
+<div id="adm-panel">
+  <div class="adm-hdr">
+    <div class="adm-title">Dashboard Admin — Zoé Studio</div>
+    <button class="adm-close" onclick="closeAdmin()">✕ Fermer</button>
+  </div>
+  <div class="adm-tabs">
+    <div class="a-tab on" onclick="aTab('t-orders',this)">Réservations</div>
+    <div class="a-tab" onclick="aTab('t-chat',this)">Chat clients</div>
+    <div class="a-tab" onclick="aTab('t-gallery',this)">Galerie</div>
+    <div class="a-tab" onclick="aTab('t-deliver',this)">Livrables</div>
+    <div class="a-tab" onclick="aTab('t-stats',this)">Statistiques</div>
+  </div>
+  <div class="adm-body">
+
+    <!-- RESERVATIONS -->
+    <div class="tp on" id="t-orders">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);">Toutes les réservations</div>
+        <button class="adm-btn ab-g" onclick="exportCSV()">Exporter CSV</button>
+      </div>
+      <div id="adm-orders"></div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="tp" id="t-chat">
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;height:calc(100vh - 180px);">
+        <div style="border:1px solid var(--border);overflow-y:auto;">
+          <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);">Conversations</div>
+          <div id="adm-convs"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;border:1px solid var(--border);">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0;">
+            <div id="adm-chat-dest" style="font-size:13px;color:var(--text2);">Sélectionnez une conversation</div>
+          </div>
+          <div class="chat-msgs" id="adm-chat-msgs" style="flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;"></div>
+          <div class="chat-input-row" style="border-top:1px solid var(--border);">
+            <input type="text" class="chat-inp" id="adm-inp" placeholder="Répondre..." onkeydown="if(event.key==='Enter')sendAdminMsg()">
+            <button class="chat-send" onclick="sendAdminMsg()">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALERIE -->
+    <div class="tp" id="t-gallery">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;">Ajouter des médias</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <div style="margin-bottom:12px;"><label class="adm-label">Titre</label><input type="text" class="adm-inp" id="m-title" placeholder="Ex: Mariage Sara &amp; Khalid"></div>
+          <div><label class="adm-label">Catégorie</label><select class="adm-sel" id="m-cat"><option value="mariage">Mariage</option><option value="evenement">Événement</option><option value="pub">Publicité</option><option value="sport">Sport</option></select></div>
+          <div style="margin-top:12px;"><label class="adm-label">Type</label><select class="adm-sel" id="m-type"><option value="image">Image (URL)</option><option value="video">Vidéo (URL)</option></select></div>
+          <div><label class="adm-label">URL du fichier *</label><input type="url" class="adm-inp" id="m-url" placeholder="https://..."></div>
+          <button class="adm-btn ab-p" onclick="addMedia()">Publier dans la galerie</button>
+        </div>
+        <div>
+          <label class="adm-label">Ou uploader directement</label>
+          <div class="upload-zone" onclick="document.getElementById('f-up').click()">
+            <div style="font-size:32px;margin-bottom:8px;">📁</div>
+            <div style="font-size:12px;color:var(--text2);">Cliquez pour choisir une photo ou vidéo</div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:4px;">JPG · PNG · MP4 · MOV</div>
+          </div>
+          <input type="file" id="f-up" accept="image/*,video/*" style="display:none" onchange="uploadMedia(this)">
+          <div id="up-status" style="margin-top:10px;font-size:12px;color:var(--text3);"></div>
+        </div>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;border-top:1px solid var(--border);padding-top:18px;">Médias publiés</div>
+      <div class="adm-gal-grid" id="adm-gal"></div>
+    </div>
+
+    <!-- LIVRABLES -->
+    <div class="tp" id="t-deliver">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:12px;">Envoyer un livrable</div>
+      <div style="background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div><label class="adm-label">Email du client *</label><input type="email" class="adm-inp" id="dl-email" placeholder="email@client.com"></div>
+          <div><label class="adm-label">Nom du fichier *</label><input type="text" class="adm-inp" id="dl-name" placeholder="Ex: Mariage_Final_4K.mp4"></div>
+          <div><label class="adm-label">Type</label><select class="adm-sel" id="dl-type"><option>Vidéo</option><option>Photos</option><option>Montage</option><option>Autre</option></select></div>
+          <div><label class="adm-label">Lien de téléchargement *</label><input type="url" class="adm-inp" id="dl-url" placeholder="https://drive.google.com/..."></div>
+        </div>
+        <div><label class="adm-label">Note</label><input type="text" class="adm-inp" id="dl-note" placeholder="Ex: Montage final 4K haute résolution"></div>
+        <button class="adm-btn ab-p" onclick="addDeliverable()">Envoyer au client</button>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;">Livrables envoyés</div>
+      <div id="adm-delivs"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="tp" id="t-stats">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;">Vue d'ensemble</div>
+      <div class="adm-stats" id="adm-stats-grid"></div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin:22px 0 12px;font-weight:700;">Services les plus demandés</div>
+      <div id="svc-chart"></div>
+      <div style="margin-top:20px;padding:16px;background:var(--card);border:1px solid var(--border);">
+        <button class="adm-btn ab-p" onclick="exportCSV()">Exporter les réservations (.csv)</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
-/* ══════════════════════════════════════
-   LOADER
-══════════════════════════════════════ */
-window.addEventListener('load', function() {
-  setTimeout(function() {
-    document.getElementById('loader').classList.add('off');
-  }, 1900);
-});
+/* ══════════════════════════════════
+   SUPABASE INIT
+══════════════════════════════════ */
+const SB_URL  = 'https://dhunruqyilhazdaarkwn.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRodW5ydXF5aWxoYXpkYWFya3duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwOTg0NzMsImV4cCI6MjA5MjY3NDQ3M30.4O34mhbbLe18qmy-PExgiMNMNKIejFaoXTipwVsXz5E';
+const sb      = supabase.createClient(SB_URL, SB_KEY);
 
-/* ══════════════════════════════════════
-   CANVAS — FOND NOIR + ANIMATIONS
-══════════════════════════════════════ */
-(function() {
-  var cv = document.getElementById('canvas-bg');
-  var cx = cv.getContext('2d');
-  var W, H;
-  function rsz() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
-  rsz();
-  window.addEventListener('resize', rsz);
+const ADM_EMAIL = 'jauresulriche@gmail.com'; /* ✏️ TON EMAIL ADMIN */
+const ADM_PWD   = 'Oxy2016.';           /* ✏️ TON MOT DE PASSE ADMIN */
 
-  /* Étoiles */
-  var stars = [];
-  for (var i = 0; i < 300; i++) {
-    stars.push({
-      x: Math.random(), y: Math.random(),
-      r: Math.random() * 2.0 + 0.3,
-      a: Math.random() * 0.55 + 0.35,
-      ph: Math.random() * 6.28,
-      sp: Math.random() * 0.025 + 0.006,
-      gold: i % 7 === 0,
-      red: i % 18 === 0
-    });
-  }
+let currentUser = null;
+let admChatEmail = '';
+let chatSub = null;
 
-  /* Particules rouges et or — bien grosses et visibles */
-  var parts = [];
-  for (var i = 0; i < 90; i++) {
-    parts.push({
-      x: Math.random() * 1920, y: Math.random() * 1080,
-      vx: (Math.random() - .5) * .65,
-      vy: (Math.random() - .5) * .65,
-      r: Math.random() * 3.8 + 1.2,
-      red: Math.random() > .5
-    });
-  }
+/* ══════════════════════════════════
+   LOADER & CANVAS
+══════════════════════════════════ */
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('off'), 1800));
+window.addEventListener('scroll', () => document.getElementById('hdr').classList.toggle('sc', window.scrollY > 50));
 
-  /* Caméras */
-  function Cam() { this.rst(); }
-  Cam.prototype.rst = function() {
-    this.x  = Math.random() * 3200 - 600;
-    this.y  = Math.random() * 2200 - 300;
-    this.ang = Math.random() * 6.28;
-    this.sc  = .55 + Math.random() * .95;
-    this.vx  = (Math.random() - .5) * .45;
-    this.vy  = (Math.random() - .5) * .45;
-    this.va  = (Math.random() - .5) * .005;
-    this.op  = 0;
-    this.top = .22 + Math.random() * .28;   /* très visible */
-    this.life = 0;
-    this.ml  = 300 + Math.random() * 340;
-  };
-  Cam.prototype.upd = function() {
-    this.x += this.vx; this.y += this.vy; this.ang += this.va;
-    this.life++;
-    if (this.life < 55) this.op += (this.top - this.op) * .07;
-    else if (this.life > this.ml - 55) this.op *= .96;
-    if (this.life > this.ml) this.rst();
-  };
-  Cam.prototype.drw = function(c) {
-    c.save();
-    c.translate(this.x, this.y);
-    c.rotate(this.ang);
-    c.scale(this.sc, this.sc);
-    c.globalAlpha = this.op;
-
-    /* Corps */
-    c.strokeStyle = '#D4AF37'; c.lineWidth = 2.5;
-    c.beginPath(); c.rect(-30, -17, 50, 34); c.stroke();
-
-    /* Objectif externe */
-    c.beginPath(); c.arc(8, 0, 14, 0, 6.28); c.stroke();
-    /* Objectif interne */
-    c.strokeStyle = 'rgba(212,175,55,0.5)';
-    c.beginPath(); c.arc(8, 0, 7, 0, 6.28); c.stroke();
-
-    /* Flash */
-    c.strokeStyle = '#D4AF37';
-    c.beginPath(); c.rect(-26, -14, 14, 10); c.stroke();
-
-    /* Viseur */
-    c.beginPath();
-    c.moveTo(-30, -17); c.lineTo(-42, -30);
-    c.lineTo(-18, -30); c.lineTo(-14, -17);
-    c.stroke();
-
-    /* Halo rouge objectif */
-    c.strokeStyle = 'rgba(255,26,53,0.7)'; c.lineWidth = 1.5;
-    c.beginPath(); c.arc(8, 0, 11, 0, 6.28); c.stroke();
-
-    /* Point rouge brillant */
-    c.fillStyle = '#FF1A35';
-    c.globalAlpha = Math.min(this.op * 3.5, 1);
-    c.beginPath(); c.arc(8, 0, 4.5, 0, 6.28); c.fill();
-
-    /* Petit glow autour du corps */
-    c.globalAlpha = this.op * 0.15;
-    c.fillStyle = '#D4AF37';
-    c.beginPath(); c.rect(-33,-20,56,40); c.fill();
-
-    c.restore();
-  };
-
-  var cams = [];
-  for (var i = 0; i < 12; i++) cams.push(new Cam());
-
-  var t = 0;
-  function draw() {
-    /* Fond noir absolu à chaque frame */
-    cx.fillStyle = '#000000';
-    cx.fillRect(0, 0, W, H);
-
-    t += .012;
-
-    /* Étoiles */
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i];
-      var a = s.a * (.5 + .5 * Math.sin(t * s.sp * 65 + s.ph));
-      cx.globalAlpha = a;
-      cx.fillStyle = s.gold ? '#F0C040' : (s.red ? '#FF3355' : '#FFFFFF');
-      cx.beginPath(); cx.arc(s.x * W, s.y * H, s.r, 0, 6.28); cx.fill();
-    }
-
-    /* Particules */
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-
-      /* Halo */
-      cx.globalAlpha = p.red ? .14 : .10;
-      cx.fillStyle = p.red ? '#FF1A35' : '#D4AF37';
-      cx.beginPath(); cx.arc(p.x, p.y, p.r * 3.5, 0, 6.28); cx.fill();
-
-      /* Corps particule */
-      cx.globalAlpha = p.red ? .70 : .55;
-      cx.fillStyle = p.red ? '#FF1A35' : '#D4AF37';
-      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.28); cx.fill();
-    }
-
-    /* Lignes de connexion */
-    for (var i = 0; i < parts.length; i++) {
-      for (var j = i + 1; j < parts.length; j++) {
-        var dx = parts[i].x - parts[j].x, dy = parts[i].y - parts[j].y;
-        if (dx*dx + dy*dy < 20000) {
-          cx.globalAlpha = .09;
-          cx.strokeStyle = (parts[i].red || parts[j].red) ? '#FF1A35' : '#D4AF37';
-          cx.lineWidth = .7;
-          cx.beginPath(); cx.moveTo(parts[i].x, parts[i].y); cx.lineTo(parts[j].x, parts[j].y); cx.stroke();
-        }
-      }
-    }
-
-    /* Caméras */
-    cx.globalAlpha = 1;
-    for (var i = 0; i < cams.length; i++) { cams[i].upd(); cams[i].drw(cx); }
-
+(function(){
+  const cv = document.getElementById('cvs'), cx = cv.getContext('2d');
+  let W, H;
+  const rsz = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  rsz(); window.addEventListener('resize', rsz);
+  const stars = Array.from({length:80}, (_,i) => ({x:Math.random(),y:Math.random(),r:Math.random()*.6+.2,a:Math.random()*.12+.03,ph:Math.random()*6.28,sp:Math.random()*.01+.003,gold:i%9===0}));
+  function Cam(){ this.r(); }
+  Cam.prototype.r = function(){ this.x=Math.random()*W; this.y=Math.random()*H; this.ang=Math.random()*6.28; this.sc=.3+Math.random()*.4; this.vx=(Math.random()-.5)*.18; this.vy=(Math.random()-.5)*.18; this.va=(Math.random()-.5)*.002; this.op=0; this.tp=.03+Math.random()*.04; this.life=0; this.ml=600+Math.random()*400; };
+  Cam.prototype.u = function(){ this.x+=this.vx; this.y+=this.vy; this.ang+=this.va; this.life++; if(this.life<80)this.op+=(this.tp-this.op)*.04; else if(this.life>this.ml-80)this.op*=.97; if(this.life>this.ml||this.x<-200||this.x>W+200||this.y<-200||this.y>H+200)this.r(); };
+  Cam.prototype.d = function(c){ c.save(); c.translate(this.x,this.y); c.rotate(this.ang); c.scale(this.sc,this.sc); c.globalAlpha=this.op; c.strokeStyle='rgba(139,105,20,.35)'; c.lineWidth=1.5; c.beginPath(); c.rect(-26,-15,44,30); c.stroke(); c.beginPath(); c.arc(7,0,11,0,6.28); c.stroke(); c.strokeStyle='rgba(139,105,20,.15)'; c.beginPath(); c.arc(7,0,5,0,6.28); c.stroke(); c.strokeStyle='rgba(139,105,20,.35)'; c.beginPath(); c.rect(-22,-11,11,8); c.stroke(); c.beginPath(); c.moveTo(-26,-15); c.lineTo(-36,-25); c.lineTo(-14,-25); c.lineTo(-10,-15); c.stroke(); c.fillStyle='rgba(139,26,26,.35)'; c.globalAlpha=Math.min(this.op*2.5,.25); c.beginPath(); c.arc(7,0,3,0,6.28); c.fill(); c.restore(); };
+  const cams = Array.from({length:3}, () => new Cam());
+  let t = 0;
+  (function draw(){ cx.clearRect(0,0,W,H); t+=.006;
+    stars.forEach(s => { cx.globalAlpha=s.a*(.5+.5*Math.sin(t*s.sp*55+s.ph)); cx.fillStyle=s.gold?'rgba(139,105,20,.4)':'rgba(26,16,8,.15)'; cx.beginPath(); cx.arc(s.x*W,s.y*H,s.r,0,6.28); cx.fill(); });
+    cx.globalAlpha=1; cams.forEach(c => {c.u();c.d(cx);});
     requestAnimationFrame(draw);
-  }
-  draw();
+  })();
 })();
 
-/* ══════════════════════════════════════
-   HORLOGE ANALOGIQUE
-══════════════════════════════════════ */
-(function() {
-  var face = document.getElementById('clk-face');
-  for (var i = 0; i < 12; i++) {
-    var tk = document.createElement('div');
-    tk.style.cssText = 'position:absolute;top:4px;left:50%;'
-      + 'width:' + (i%3===0?'2':'1') + 'px;'
-      + 'height:' + (i%3===0?'11':'6') + 'px;'
-      + 'background:rgba(212,175,55,' + (i%3===0?'.8':'.35') + ');'
-      + 'transform-origin:bottom center;'
-      + 'transform:translateX(-50%) rotate(' + (i*30) + 'deg)';
-    face.appendChild(tk);
-  }
-
-  var sh = document.getElementById('sel-h');
-  var sm = document.getElementById('sel-m');
-  for (var h = 0; h < 24; h++) {
-    var o = document.createElement('option');
-    o.value = h; o.textContent = (h<10?'0':'')+h; sh.appendChild(o);
-  }
-  for (var m = 0; m < 60; m += 5) {
-    var o = document.createElement('option');
-    o.value = m; o.textContent = (m<10?'0':'')+m; sm.appendChild(o);
-  }
-  var n = new Date();
-  sh.value = n.getHours();
-  sm.value = Math.floor(n.getMinutes()/5)*5;
-
-  window.syncClk = function() {
-    var h = parseInt(sh.value), m = parseInt(sm.value);
-    document.getElementById('f-heure').value = (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
-    document.getElementById('hH').style.transform = 'translateX(-50%) rotate('+((h%12)*30+m*.5)+'deg)';
-    document.getElementById('hM').style.transform = 'translateX(-50%) rotate('+(m*6)+'deg)';
-  };
-  syncClk();
-  setInterval(function() {
-    document.getElementById('hS').style.transform = 'translateX(-50%) rotate('+(new Date().getSeconds()*6)+'deg)';
-  }, 1000);
+/* ══════════════════════════════════
+   HORLOGE
+══════════════════════════════════ */
+(function(){
+  const face = document.getElementById('clk-face');
+  for(let i=0;i<12;i++){ const tk=document.createElement('div'); tk.style.cssText=`position:absolute;top:4px;left:50%;width:${i%3===0?2:1}px;height:${i%3===0?9:5}px;background:rgba(139,105,20,${i%3===0?.55:.22});transform-origin:bottom center;transform:translateX(-50%) rotate(${i*30}deg)`; face.appendChild(tk); }
+  const sh = document.getElementById('sel-h'), sm = document.getElementById('sel-m');
+  for(let h=0;h<24;h++){ const o=document.createElement('option'); o.value=h; o.textContent=(h<10?'0':'')+h; sh.appendChild(o); }
+  for(let m=0;m<60;m+=5){ const o=document.createElement('option'); o.value=m; o.textContent=(m<10?'0':'')+m; sm.appendChild(o); }
+  const n = new Date(); sh.value=n.getHours(); sm.value=Math.floor(n.getMinutes()/5)*5;
+  window.syncClk = () => { const h=parseInt(sh.value),m=parseInt(sm.value); document.getElementById('hH').style.transform=`translateX(-50%) rotate(${(h%12)*30+m*.5}deg)`; document.getElementById('hM').style.transform=`translateX(-50%) rotate(${m*6}deg)`; };
+  syncClk(); setInterval(() => { document.getElementById('hS').style.transform=`translateX(-50%) rotate(${new Date().getSeconds()*6}deg)`; }, 1000);
 })();
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════
    CALENDRIER
-══════════════════════════════════════ */
-(function() {
-  var MN = ['Janvier','Février','Mars','Avril','Mai','Juin',
-            'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  var cur = new Date(), sel = null;
-
-  function render() {
-    var y = cur.getFullYear(), m = cur.getMonth();
-    document.getElementById('cal-title').textContent = MN[m] + ' ' + y;
-    var g = document.getElementById('cal-g'); g.innerHTML = '';
-    var fd  = new Date(y,m,1).getDay();
-    var dim = new Date(y,m+1,0).getDate();
-    var pv  = new Date(y,m,0).getDate();
-    var td  = new Date();
-
-    for (var i = 0; i < fd; i++) {
-      var e = document.createElement('div');
-      e.className = 'cd dim';
-      e.textContent = pv - fd + i + 1;
+══════════════════════════════════ */
+(function(){
+  const MN=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  let cur=new Date(), sel=null, selStr='';
+  function render(){
+    const y=cur.getFullYear(), m=cur.getMonth();
+    document.getElementById('cal-title').textContent=MN[m]+' '+y;
+    const g=document.getElementById('cal-g'); g.innerHTML='';
+    const fd=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), pv=new Date(y,m,0).getDate(), td=new Date();
+    for(let i=0;i<fd;i++){ const e=document.createElement('div'); e.className='cd dim'; e.textContent=pv-fd+i+1; g.appendChild(e); }
+    for(let d=1;d<=dim;d++){
+      const e=document.createElement('div'); e.className='cd'; e.textContent=d;
+      const dt=new Date(y,m,d);
+      if(td.toDateString()===dt.toDateString()) e.classList.add('tod');
+      if(sel&&sel.toDateString()===dt.toDateString()) e.classList.add('sel');
+      e.onclick=()=>{ sel=new Date(y,m,d); const dd=(d<10?'0':'')+d, mm2=(m+1<10?'0':'')+(m+1); selStr=dd+'/'+mm2+'/'+y; document.getElementById('cal-p').textContent=selStr; render(); };
       g.appendChild(e);
     }
-    for (var d = 1; d <= dim; d++) {
-      (function(day) {
-        var e = document.createElement('div');
-        e.className = 'cd';
-        e.textContent = day;
-        var dt = new Date(y, m, day);
-        if (td.toDateString() === dt.toDateString()) e.classList.add('tod');
-        if (sel && sel.toDateString() === dt.toDateString()) e.classList.add('sel');
-        e.addEventListener('click', function() {
-          sel = new Date(y, m, day);
-          var dd  = (day<10?'0':'')+day;
-          var mm2 = (m+1<10?'0':'')+(m+1);
-          document.getElementById('f-date').value = dd+'/'+mm2+'/'+y;
-          document.getElementById('cal-picked').textContent = '✦ '+dd+'/'+mm2+'/'+y+' ✦';
-          render();
-        });
-        g.appendChild(e);
-      })(d);
-    }
-    var rm = 42 - fd - dim;
-    for (var i = 1; i <= rm; i++) {
-      var e = document.createElement('div');
-      e.className = 'cd dim'; e.textContent = i; g.appendChild(e);
-    }
+    const rm=42-fd-dim; for(let i=1;i<=rm;i++){ const e=document.createElement('div'); e.className='cd dim'; e.textContent=i; g.appendChild(e); }
   }
-
-  document.getElementById('cal-prev').addEventListener('click', function() { cur.setMonth(cur.getMonth()-1); render(); });
-  document.getElementById('cal-next').addEventListener('click', function() { cur.setMonth(cur.getMonth()+1); render(); });
+  document.getElementById('cal-prev').onclick=()=>{cur.setMonth(cur.getMonth()-1);render();};
+  document.getElementById('cal-next').onclick=()=>{cur.setMonth(cur.getMonth()+1);render();};
   render();
+  window.getCalDate=()=>selStr;
 })();
 
-/* ══════════════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════════════ */
-(function() {
-  var io = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('on'); });
-  }, { threshold: .1 });
-  document.querySelectorAll('.rev').forEach(function(el) { io.observe(el); });
+/* ══════════════════════════════════
+   SLIDER & FAQ & STATS
+══════════════════════════════════ */
+(function(){
+  const track=document.getElementById('tt'), cards=track.querySelectorAll('.tc'), dots=document.getElementById('tdots');
+  let cur=0;
+  const pp=()=>window.innerWidth<=700?1:3;
+  const upd=()=>{ const p=pp(),w=cards[0].offsetWidth+18,max=Math.ceil(cards.length/p)-1; if(cur>max)cur=max; track.style.transform=`translateX(-${cur*p*w}px)`; dots.querySelectorAll('.td').forEach((d,i)=>d.classList.toggle('on',i===cur)); };
+  const build=()=>{ dots.innerHTML=''; const p=pp(),pages=Math.ceil(cards.length/p); for(let i=0;i<pages;i++){const d=document.createElement('div');d.className='td'+(i===0?' on':'');d.onclick=()=>{cur=i;upd();};dots.appendChild(d);} };
+  document.getElementById('tp').onclick=()=>{cur=Math.max(0,cur-1);upd();};
+  document.getElementById('tn').onclick=()=>{const p=pp();cur=Math.min(Math.ceil(cards.length/p)-1,cur+1);upd();};
+  build();upd();window.addEventListener('resize',()=>{build();upd();});
 })();
+window.tFaq=btn=>{const it=btn.parentElement,op=it.classList.contains('open');document.querySelectorAll('.fi-item').forEach(i=>i.classList.remove('open'));if(!op)it.classList.add('open');};
+function aC(id,target,suf){const el=document.getElementById(id);let done=false;new IntersectionObserver(en=>{if(en[0].isIntersecting&&!done){done=true;let s=0,iv=setInterval(()=>{s+=target/50;if(s>=target){s=target;clearInterval(iv);}el.innerHTML=Math.floor(s)+'<sup>'+suf+'</sup>';},28);}},{threshold:.5}).observe(el);}
+aC('s1',120,'+');aC('s2',98,'+');aC('s3',45,'+');aC('s4',100,'%');
+new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08}).observe(document.querySelectorAll('.rev')?document.querySelectorAll('.rev')[0]:document.body);
+(function(){const io=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08});document.querySelectorAll('.rev').forEach(el=>io.observe(el));})();
+document.querySelectorAll('.gf').forEach(btn=>btn.onclick=function(){document.querySelectorAll('.gf').forEach(b=>b.classList.remove('on'));this.classList.add('on');const cat=this.getAttribute('data-cat');document.querySelectorAll('.gi').forEach(item=>item.style.display=(cat==='all'||item.getAttribute('data-cat')===cat)?'':'none');});
 
-/* ══════════════════════════════════════
-   FORM SUBMIT
-══════════════════════════════════════ */
-function doSubmit(e) {
-  e.preventDefault();
-  var btn = document.getElementById('btn-sub');
-  btn.textContent = 'Envoi en cours...';
-  btn.disabled = true;
-  fetch(e.target.action, {
-    method: 'POST',
-    body: new FormData(e.target),
-    headers: { Accept: 'application/json' }
-  }).then(function(r) {
-    if (r.ok) {
-      document.getElementById('suc').classList.add('on');
-      btn.textContent = '✦  Demande envoyée avec succès !';
-      e.target.reset();
-    } else {
-      btn.textContent = '⚠  Erreur — Réessayez';
-      btn.disabled = false;
-    }
-  }).catch(function() {
-    btn.textContent = '⚠  Erreur — Réessayez';
-    btn.disabled = false;
+/* ══════════════════════════════════
+   GALERIE PUBLIQUE
+══════════════════════════════════ */
+async function renderGallery(){
+  const { data, error } = await sb.from('galerie').select('*').order('created_at',{ascending:false});
+  const grid=document.getElementById('gal-grid'), emp=document.getElementById('gal-empty');
+  grid.innerHTML='';
+  if(!data||data.length===0){grid.appendChild(emp);emp.style.display='block';return;}
+  emp.style.display='none';
+  data.forEach(m=>{
+    const div=document.createElement('div');
+    div.className='gi'+(m.type==='video'?' vid':'');
+    div.setAttribute('data-cat',m.categorie);
+    div.innerHTML=(m.type==='video'?`<video src="${m.url}" muted playsinline></video><div class="gi-play">▶</div>`:`<img src="${m.url}" alt="${m.titre}" loading="lazy">`)+`<div class="gi-ov"><div class="gi-title">${m.titre}</div><div class="gi-cat">${m.categorie}</div></div>`;
+    div.onclick=()=>openLB(m);
+    grid.appendChild(div);
   });
 }
-</script>
+function openLB(m){const img=document.getElementById('lb-img'),vid=document.getElementById('lb-vid');document.getElementById('lb-cap').textContent=m.titre;if(m.type==='video'){img.style.display='none';vid.style.display='';vid.src=m.url;}else{vid.style.display='none';img.style.display='';img.src=m.url;}document.getElementById('lb').classList.add('on');}
+window.closeLB=()=>{document.getElementById('lb').classList.remove('on');document.getElementById('lb-vid').pause();document.getElementById('lb-vid').src='';};
+document.getElementById('lb').onclick=e=>{if(e.target===document.getElementById('lb'))closeLB();};
 
+/* ══════════════════════════════════
+   MODALS
+══════════════════════════════════ */
+const openModal=id=>document.getElementById(id).classList.add('on');
+const closeModal=id=>document.getElementById(id).classList.remove('on');
+window.closeModal=closeModal;
+document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('on');});
+window.openClientLogin=e=>{if(e)e.preventDefault();openModal('m-login');setTimeout(()=>document.getElementById('cl-email').focus(),100);};
+window.openRegister=()=>{closeModal('m-login');openModal('m-register');};
+
+/* ══════════════════════════════════
+   AUTH CLIENT (Supabase Auth)
+══════════════════════════════════ */
+async function clientLogin(){
+  const email=document.getElementById('cl-email').value.trim().toLowerCase();
+  const pwd=document.getElementById('cl-pwd').value;
+  const err=document.getElementById('cl-err');
+
+  /* Admin login */
+  if(email===ADM_EMAIL.toLowerCase()&&pwd===ADM_PWD){
+    closeModal('m-login');
+    document.getElementById('cl-pwd').value='';
+    openAdminDash();
+    return;
+  }
+
+  /* Client Supabase auth */
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pwd});
+  if(error){err.classList.add('on');return;}
+  err.classList.remove('on');
+  closeModal('m-login');
+  document.getElementById('cl-pwd').value='';
+
+  /* Get profile */
+  const {data:profile}=await sb.from('profiles').select('*').eq('email',email).single();
+  currentUser={email,nom:profile?.nom||email.split('@')[0],...profile};
+  openClientDash();
+}
+window.clientLogin=clientLogin;
+
+async function clientRegister(){
+  const nom=document.getElementById('rg-nom').value.trim();
+  const email=document.getElementById('rg-email').value.trim().toLowerCase();
+  const pwd=document.getElementById('rg-pwd').value;
+  const err=document.getElementById('rg-err');
+  if(!nom||!email||!pwd){err.textContent='Remplissez tous les champs.';err.classList.add('on');return;}
+  if(pwd.length<6){err.textContent='Mot de passe trop court (6 caractères min).';err.classList.add('on');return;}
+
+  /* Supabase signup */
+  const {data,error}=await sb.auth.signUp({email,password:pwd});
+  if(error){err.textContent=error.message;err.classList.add('on');return;}
+
+  /* Create profile */
+  await sb.from('profiles').insert({email,nom,role:'client'});
+  err.classList.remove('on');
+  closeModal('m-register');
+  currentUser={email,nom};
+  openClientDash();
+
+  /* Message de bienvenue */
+  await sb.from('messages').insert({conversation_email:email,from_role:'admin',contenu:`Bonjour ${nom} ! Bienvenue dans votre espace Zoé Studio. Nous sommes là pour vous accompagner. N'hésitez pas à nous écrire ici ! 🎬`,lu:false});
+}
+window.clientRegister=clientRegister;
+
+window.logoutClient=async()=>{
+  await sb.auth.signOut();
+  if(chatSub){sb.removeChannel(chatSub);chatSub=null;}
+  currentUser=null;
+  document.getElementById('client-dash').classList.remove('on');
+};
+
+/* ══════════════════════════════════
+   ESPACE CLIENT
+══════════════════════════════════ */
+async function openClientDash(){
+  document.getElementById('cd-welcome').textContent=`Bonjour, ${currentUser.nom} !`;
+  document.getElementById('cd-email-disp').textContent=currentUser.email;
+  await renderDashSummary();
+  await renderClientOrders();
+  await renderClientDelivs();
+  await renderChat();
+  document.getElementById('client-dash').classList.add('on');
+
+  /* Realtime chat */
+  if(chatSub) sb.removeChannel(chatSub);
+  chatSub = sb.channel('chat-'+currentUser.email)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`conversation_email=eq.${currentUser.email}`}, payload=>{renderChat();})
+    .subscribe();
+}
+window.cdTab=(id,el)=>{document.querySelectorAll('.cd-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.cd-tab').forEach(t=>t.classList.remove('on'));document.getElementById(id).classList.add('on');el.classList.add('on');if(id==='p-chat')renderChat();};
+
+async function renderDashSummary(){
+  const email=currentUser.email;
+  const [{data:orders},{data:delivs},{data:msgs}]=await Promise.all([
+    sb.from('reservations').select('*').eq('client_email',email),
+    sb.from('livrables').select('*').eq('client_email',email),
+    sb.from('messages').select('*').eq('conversation_email',email).eq('from_role','admin').eq('lu',false)
+  ]);
+  const s=document.getElementById('dash-sum');s.innerHTML='';
+  [{icon:'📋',val:(orders||[]).length,lbl:'Réservation(s)',sub:(orders||[]).length>0?'Statut : '+((orders[orders.length-1].statut==='new')?'En attente':(orders[orders.length-1].statut==='confirmed')?'Confirmée':'Terminée'):'Aucune réservation'},
+   {icon:'📥',val:(delivs||[]).length,lbl:'Livrable(s)',sub:(delivs||[]).length>0?'Prêt à télécharger':'En attente de livraison'},
+   {icon:'💬',val:(msgs||[]).length,lbl:'Message(s) non lu(s)',sub:(msgs||[]).length>0?'Nouveau message de Zoé Studio':'Aucun nouveau message'}
+  ].forEach(c=>{const div=document.createElement('div');div.style.cssText='background:var(--card);border:1px solid var(--border);border-top:2px solid var(--gold);padding:22px 18px;';div.innerHTML=`<div style="font-size:28px;margin-bottom:8px;">${c.icon}</div><div style="font-family:Playfair Display,serif;font-size:28px;font-weight:900;color:var(--gold);line-height:1;">${c.val}</div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:4px;">${c.lbl}</div><div style="font-size:12px;color:var(--text2);margin-top:6px;">${c.sub}</div>`;s.appendChild(div);});
+}
+
+async function renderClientOrders(){
+  const {data}=await sb.from('reservations').select('*').eq('client_email',currentUser.email).order('created_at',{ascending:false});
+  const list=document.getElementById('cl-orders');list.innerHTML='';
+  if(!data||data.length===0){list.innerHTML='<div style="padding:40px;text-align:center;color:var(--text3);font-family:Cormorant Garamond,serif;font-size:17px;">Aucune réservation. <a href="#reservation" style="color:var(--gold);" onclick="logoutClient()">Réservez maintenant</a>.</div>';return;}
+  data.forEach(o=>{
+    const bc=o.statut==='new'?'ob-new':o.statut==='confirmed'?'ob-ok':'ob-done';
+    const bl=o.statut==='new'?'En attente de confirmation':o.statut==='confirmed'?'Confirmée ✓':'Terminée ✓';
+    const div=document.createElement('div');div.className='order-card';
+    div.innerHTML=`<span class="order-badge ${bc}">${bl}</span><div class="order-row"><div>Service<br><span>${o.service}</span></div><div>Date<br><span>${o.date_evenement||'—'}</span></div><div>Heure<br><span>${o.heure_evenement||'—'}</span></div><div>Lieu<br><span>${o.lieu||'—'}</span></div>${o.budget?`<div>Budget<br><span>${o.budget}</span></div>`:''}</div>`;
+    list.appendChild(div);
+  });
+}
+
+async function renderClientDelivs(){
+  const {data}=await sb.from('livrables').select('*').eq('client_email',currentUser.email).order('created_at',{ascending:false});
+  const list=document.getElementById('cl-delivs');list.innerHTML='';
+  if(!data||data.length===0){list.innerHTML='<div class="deliv-empty">Vos fichiers apparaîtront ici une fois le montage terminé.</div>';return;}
+  data.forEach(d=>{const div=document.createElement('div');div.className='deliv-card';div.innerHTML=`<div><div class="deliv-name">${d.nom}</div><div class="deliv-meta">${d.type||''}${d.note?' — '+d.note:''}</div></div><a href="${d.url}" target="_blank" class="deliv-dl">Télécharger</a>`;list.appendChild(div);});
+}
+
+/* ══════════════════════════════════
+   CHAT CLIENT
+══════════════════════════════════ */
+async function renderChat(){
+  if(!currentUser)return;
+  const {data}=await sb.from('messages').select('*').eq('conversation_email',currentUser.email).order('created_at',{ascending:true});
+  /* Marquer messages admin comme lus */
+  await sb.from('messages').update({lu:true}).eq('conversation_email',currentUser.email).eq('from_role','admin');
+  const container=document.getElementById('chat-msgs');container.innerHTML='';
+  if(!data||data.length===0){container.innerHTML='<div class="chat-empty">Aucun message. Envoyez un message à l\'équipe Zoé Studio !</div>';return;}
+  data.forEach(m=>{
+    const div=document.createElement('div');
+    div.className='msg-b '+(m.from_role==='admin'?'admin':'client');
+    const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    div.innerHTML=(m.from_role==='admin'?'<div class="msg-from">Zoé Studio</div>':'')+`<div class="msg-txt">${m.contenu}</div><div class="msg-time">${time}</div>`;
+    container.appendChild(div);
+  });
+  container.scrollTop=container.scrollHeight;
+}
+
+window.sendClientMsg=async()=>{
+  if(!currentUser)return;
+  const inp=document.getElementById('chat-inp');
+  const txt=inp.value.trim();if(!txt)return;
+  inp.value='';
+  await sb.from('messages').insert({conversation_email:currentUser.email,from_role:'client',contenu:txt,lu:false});
+  await renderChat();
+};
+
+/* ══════════════════════════════════
+   ADMIN
+══════════════════════════════════ */
+let secretClicks=0,secretTimer=null;
+window.secretClick=()=>{
+  secretClicks++;
+  if(secretTimer)clearTimeout(secretTimer);
+  secretTimer=setTimeout(()=>secretClicks=0,3000);
+  if(secretClicks>=5){secretClicks=0;openModal('m-admin');setTimeout(()=>document.getElementById('adm-pwd').focus(),100);}
+};
+window.checkAdmin=()=>{
+  const v=document.getElementById('adm-pwd').value;
+  if(v===ADM_PWD){document.getElementById('adm-err').classList.remove('on');closeModal('m-admin');document.getElementById('adm-pwd').value='';openAdminDash();}
+  else{document.getElementById('adm-err').classList.add('on');document.getElementById('adm-pwd').value='';}
+};
+
+async function openAdminDash(){
+  await Promise.all([renderAdmOrders(),renderAdmConvs(),renderAdmGallery(),renderAdmDelivs(),renderAdmStats()]);
+  document.getElementById('adm-panel').classList.add('on');
+}
+window.closeAdmin=()=>document.getElementById('adm-panel').classList.remove('on');
+window.aTab=(id,el)=>{document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.a-tab').forEach(t=>t.classList.remove('on'));document.getElementById(id).classList.add('on');el.classList.add('on');if(id==='t-chat'){renderAdmConvs();renderAdmChat();}};
+
+/* ADMIN — RESERVATIONS */
+async function renderAdmOrders(){
+  const {data}=await sb.from('reservations').select('*').order('created_at',{ascending:false});
+  const list=document.getElementById('adm-orders');list.innerHTML='';
+  if(!data||data.length===0){list.innerHTML='<div class="loading-state">Aucune réservation reçue.</div>';return;}
+  data.forEach(o=>{
+    const sc=o.statut==='new'?'new':o.statut==='confirmed'?'ok':'done';
+    const bc=o.statut==='new'?'b-new':o.statut==='confirmed'?'b-ok':'b-done';
+    const bl=o.statut==='new'?'Nouveau':o.statut==='confirmed'?'Confirmé':'Terminé';
+    const div=document.createElement('div');div.className='cmd '+sc;
+    div.innerHTML=`<div class="cmd-top"><div class="cmd-name">${o.client_nom}</div><span class="cmd-badge ${bc}">${bl}</span></div><div class="cmd-meta"><span>📅 ${o.date_evenement||'—'}</span><span>🕐 ${o.heure_evenement||'—'}</span><span>📍 ${o.lieu||'—'}</span><span>📞 ${o.telephone||'—'}</span><span>✉️ ${o.client_email}</span></div><div class="cmd-svc">${o.service}${o.budget?' — '+o.budget:''}</div><div class="cmd-btns">${o.statut==='new'?`<button class="cb cb-ok" onclick="cStatus('${o.id}','confirmed')">Confirmer</button>`:''}${o.statut==='confirmed'?`<button class="cb cb-done" onclick="cStatus('${o.id}','done')">Terminé</button>`:''}<button class="cb cb-wa" onclick="waContact('${o.telephone}','${o.client_nom}')">WhatsApp</button><button class="cb cb-del" onclick="delOrder('${o.id}')">Supprimer</button></div>`;
+    list.appendChild(div);
+  });
+}
+window.cStatus=async(id,s)=>{await sb.from('reservations').update({statut:s}).eq('id',id);renderAdmOrders();renderAdmStats();};
+window.delOrder=async id=>{if(!confirm('Supprimer ?'))return;await sb.from('reservations').delete().eq('id',id);renderAdmOrders();renderAdmStats();};
+window.waContact=(tel,nom)=>window.open(`https://wa.me/${(tel||'').replace(/[^0-9]/g,'')}?text=Bonjour%20${encodeURIComponent(nom)}%2C%20Zo%C3%A9%20Studio%20vous%20contacte.`);
+
+/* ADMIN — CHAT */
+async function renderAdmConvs(){
+  const {data}=await sb.from('messages').select('conversation_email').neq('from_role','admin');
+  const list=document.getElementById('adm-convs');list.innerHTML='';
+  if(!data||data.length===0){list.innerHTML='<div style="padding:16px;font-size:13px;color:var(--text3);">Aucune conversation.</div>';return;}
+  const emails=[...new Set(data.map(m=>m.conversation_email))];
+  for(const email of emails){
+    const {data:msgs}=await sb.from('messages').select('*').eq('conversation_email',email).order('created_at',{ascending:false}).limit(1);
+    const {data:unread}=await sb.from('messages').select('id',{count:'exact'}).eq('conversation_email',email).eq('from_role','client').eq('lu',false);
+    const last=msgs&&msgs[0];
+    const cnt=unread?unread.length:0;
+    const div=document.createElement('div');div.className='adm-conv-item'+(cnt>0?' unread':'');
+    div.innerHTML=`<div><div class="aci-email">${email}</div><div class="aci-preview">${last?last.contenu.substring(0,35)+'...':'—'}</div></div>${cnt>0?`<span class="aci-badge">${cnt}</span>`:''}`;
+    div.onclick=()=>{admChatEmail=email;renderAdmChat();renderAdmConvs();};
+    list.appendChild(div);
+  }
+}
+
+async function renderAdmChat(){
+  if(!admChatEmail)return;
+  document.getElementById('adm-chat-dest').textContent=admChatEmail;
+  const {data}=await sb.from('messages').select('*').eq('conversation_email',admChatEmail).order('created_at',{ascending:true});
+  await sb.from('messages').update({lu:true}).eq('conversation_email',admChatEmail).eq('from_role','client');
+  const container=document.getElementById('adm-chat-msgs');container.innerHTML='';
+  if(!data||data.length===0){container.innerHTML='<div class="chat-empty">Aucun message.</div>';return;}
+  data.forEach(m=>{
+    const div=document.createElement('div');
+    div.className='msg-b '+(m.from_role==='admin'?'admin':'client');
+    const time=new Date(m.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    div.innerHTML=(m.from_role==='admin'?'<div class="msg-from">Zoé Studio</div>':'')+`<div class="msg-txt">${m.contenu}</div><div class="msg-time">${time}</div>`;
+    container.appendChild(div);
+  });
+  container.scrollTop=container.scrollHeight;
+  renderAdmConvs();
+}
+
+window.sendAdminMsg=async()=>{
+  if(!admChatEmail){alert('Sélectionnez une conversation.');return;}
+  const inp=document.getElementById('adm-inp');
+  const txt=inp.value.trim();if(!txt)return;
+  inp.value='';
+  await sb.from('messages').insert({conversation_email:admChatEmail,from_role:'admin',contenu:txt,lu:false});
+  await renderAdmChat();
+};
+
+/* ADMIN — GALERIE */
+async function renderAdmGallery(){
+  const {data}=await sb.from('galerie').select('*').order('created_at',{ascending:false});
+  const grid=document.getElementById('adm-gal');grid.innerHTML='';
+  if(!data||data.length===0){grid.innerHTML='<div style="color:var(--text3);font-family:Cormorant Garamond,serif;font-size:16px;padding:20px;grid-column:1/-1;">Aucun média.</div>';return;}
+  data.forEach(m=>{const div=document.createElement('div');div.className='ag-item';div.innerHTML=(m.type==='video'?`<video src="${m.url}" muted></video>`:`<img src="${m.url}" alt="${m.titre}">`)+`<button class="ag-del" onclick="delMedia('${m.id}')">✕</button><div class="ag-lbl">${m.titre}</div>`;grid.appendChild(div);});
+}
+
+window.addMedia=async()=>{
+  const titre=document.getElementById('m-title').value.trim();
+  const url=document.getElementById('m-url').value.trim();
+  if(!titre||!url){alert('Remplissez le titre et l\'URL.');return;}
+  await sb.from('galerie').insert({titre,categorie:document.getElementById('m-cat').value,type:document.getElementById('m-type').value,url});
+  document.getElementById('m-title').value='';document.getElementById('m-url').value='';
+  renderAdmGallery();renderGallery();
+};
+
+window.uploadMedia=async input=>{
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  const titre=document.getElementById('m-title').value.trim()||file.name.split('.')[0];
+  const ext=file.name.split('.').pop().toLowerCase();
+  const path=`${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
+  const status=document.getElementById('up-status');
+  status.textContent='Upload en cours...';
+  const {data,error}=await sb.storage.from('galerie').upload(path,file,{cacheControl:'3600',upsert:false});
+  if(error){status.textContent='Erreur : '+error.message;return;}
+  const {data:{publicUrl}}=sb.storage.from('galerie').getPublicUrl(path);
+  const type=file.type.startsWith('video')?'video':'image';
+  await sb.from('galerie').insert({titre:titre||path,categorie:document.getElementById('m-cat').value,type,url:publicUrl});
+  status.textContent='✓ Publié avec succès !';
+  input.value='';
+  document.getElementById('m-title').value='';
+  renderAdmGallery();renderGallery();
+};
+
+window.delMedia=async id=>{if(!confirm('Supprimer ?'))return;await sb.from('galerie').delete().eq('id',id);renderAdmGallery();renderGallery();};
+
+/* ADMIN — LIVRABLES */
+window.addDeliverable=async()=>{
+  const email=document.getElementById('dl-email').value.trim().toLowerCase();
+  const nom=document.getElementById('dl-name').value.trim();
+  const url=document.getElementById('dl-url').value.trim();
+  if(!email||!nom||!url){alert('Remplissez tous les champs obligatoires.');return;}
+  await sb.from('livrables').insert({client_email:email,nom,type:document.getElementById('dl-type').value,url,note:document.getElementById('dl-note').value.trim()});
+  /* Message auto */
+  await sb.from('messages').insert({conversation_email:email,from_role:'admin',contenu:`Votre livrable "${nom}" est disponible dans votre espace client → "Mes livrables". 📥`,lu:false});
+  document.getElementById('dl-email').value='';document.getElementById('dl-name').value='';document.getElementById('dl-url').value='';document.getElementById('dl-note').value='';
+  alert(`Livrable envoyé à ${email} !`);
+  renderAdmDelivs();
+};
+
+async function renderAdmDelivs(){
+  const {data}=await sb.from('livrables').select('*').order('created_at',{ascending:false});
+  const list=document.getElementById('adm-delivs');list.innerHTML='';
+  if(!data||data.length===0){list.innerHTML='<div class="loading-state">Aucun livrable envoyé.</div>';return;}
+  data.forEach(d=>{const div=document.createElement('div');div.style.cssText='background:var(--card);border:1px solid var(--border);padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;';div.innerHTML=`<div><div style="font-size:13px;font-weight:600;color:var(--text);">${d.nom}</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">${d.client_email} — ${d.type||''}${d.note?' — '+d.note:''}</div></div><div style="display:flex;gap:6px;"><a href="${d.url}" target="_blank" class="cb cb-ok" style="text-decoration:none;">Voir</a><button class="cb cb-del" onclick="delDeliv('${d.id}')">Supprimer</button></div>`;list.appendChild(div);});
+}
+window.delDeliv=async id=>{if(!confirm('Supprimer ?'))return;await sb.from('livrables').delete().eq('id',id);renderAdmDelivs();};
+
+/* ADMIN — STATS */
+async function renderAdmStats(){
+  const [{data:orders},{data:media},{data:unread}]=await Promise.all([
+    sb.from('reservations').select('*'),
+    sb.from('galerie').select('id'),
+    sb.from('messages').select('id').eq('from_role','client').eq('lu',false)
+  ]);
+  const now=new Date();
+  const newO=(orders||[]).filter(o=>o.statut==='new').length;
+  const thisMonth=(orders||[]).filter(o=>{try{const d=new Date(o.created_at);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}catch(e){return false;}}).length;
+  document.getElementById('adm-stats-grid').innerHTML=
+    `<div class="as"><span class="as-n">${(orders||[]).length}</span><span class="as-l">Total réservations</span></div>`+
+    `<div class="as"><span class="as-n">${newO}</span><span class="as-l">En attente</span>${newO>0?`<div class="as-b">${newO} non traité(s)</div>`:''}</div>`+
+    `<div class="as"><span class="as-n">${thisMonth}</span><span class="as-l">Ce mois-ci</span></div>`+
+    `<div class="as"><span class="as-n">${(unread||[]).length}</span><span class="as-l">Messages non lus</span>${(unread||[]).length>0?`<div class="as-b">${unread.length} non lu(s)</div>`:''}</div>`;
+  const svcCount={};(orders||[]).forEach(o=>{svcCount[o.service]=(svcCount[o.service]||0)+1;});
+  const chart=document.getElementById('svc-chart');chart.innerHTML='';const total=(orders||[]).length||1;
+  Object.keys(svcCount).sort((a,b)=>svcCount[b]-svcCount[a]).forEach(s=>{
+    const pct=Math.round((svcCount[s]/total)*100);
+    const row=document.createElement('div');row.className='chart-row';
+    row.innerHTML=`<div class="chart-lbl">${s}</div><div class="chart-bar-wrap"><div class="chart-bar" style="width:${pct}%"></div></div><div class="chart-val">${svcCount[s]}</div>`;
+    chart.appendChild(row);
+  });
+  if(!Object.keys(svcCount).length)chart.innerHTML='<div class="loading-state">Aucune donnée.</div>';
+}
+
+/* ══════════════════════════════════
+   FORM SUBMIT
+══════════════════════════════════ */
+window.doSubmit=async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('btn-sub');
+  btn.textContent='Envoi en cours...';btn.disabled=true;
+  const email=document.getElementById('f-email').value.trim().toLowerCase();
+  const nom=document.getElementById('f-nom').value.trim();
+  const {error}=await sb.from('reservations').insert({
+    client_email:email,
+    client_nom:nom,
+    telephone:document.getElementById('f-tel').value,
+    service:document.getElementById('f-service').value,
+    date_evenement:window.getCalDate(),
+    heure_evenement:(()=>{const h=document.getElementById('sel-h').value,m=document.getElementById('sel-m').value;return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;})(),
+    lieu:document.getElementById('f-lieu').value,
+    nb_jours:document.getElementById('f-jours').value,
+    budget:document.getElementById('f-budget').value,
+    attentes:document.getElementById('f-attentes').value,
+    statut:'new'
+  });
+
+  /* Message de bienvenue auto */
+  const {data:existing}=await sb.from('messages').select('id').eq('conversation_email',email).limit(1);
+  if(!existing||existing.length===0){
+    await sb.from('messages').insert({conversation_email:email,from_role:'admin',contenu:`Bonjour ${nom} ! Merci pour votre réservation "${document.getElementById('f-service').value}". Nous vous contacterons dans les 24h. N'hésitez pas à nous écrire ici ! 🎬`,lu:false});
+  }
+
+  /* Web3Forms backup */
+  try{
+    const fd=new FormData();
+    fd.append('access_key','40008284-53ab-4aea-ab6c-84769b2a4a44');
+    fd.append('subject','Nouvelle Réservation — Zoé Studio');
+    fd.append('from_name',nom);fd.append('email',email);
+    fd.append('message',`Service: ${document.getElementById('f-service').value}\nDate: ${window.getCalDate()}\nLieu: ${document.getElementById('f-lieu').value}`);
+    await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
+  }catch(e){}
+
+  document.getElementById('suc').classList.add('on');
+  btn.textContent='Demande envoyée avec succès';
+  document.getElementById('form').reset();
+};
+
+/* ══════════════════════════════════
+   EXPORT CSV
+══════════════════════════════════ */
+window.exportCSV=async()=>{
+  const {data}=await sb.from('reservations').select('*').order('created_at',{ascending:false});
+  if(!data||data.length===0){alert('Aucune réservation.');return;}
+  const rows=[['Nom','Email','Téléphone','Service','Date','Heure','Lieu','Budget','Statut','Créé le']];
+  data.forEach(o=>rows.push([o.client_nom,o.client_email,o.telephone||'',o.service,o.date_evenement||'',o.heure_evenement||'',o.lieu||'',o.budget||'',o.statut,new Date(o.created_at).toLocaleDateString('fr-FR')]));
+  const csv=rows.map(r=>r.map(c=>'"'+(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='reservations-zoe-studio.csv';a.click();
+};
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+renderGallery();
+</script>
 </body>
 </html>
