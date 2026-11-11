@@ -157,14 +157,14 @@ function Connexion({ onOk }: { onOk: (email: string, nom?: string) => void }) {
             />
             {creation && <p className="mt-1.5 text-sm text-brume">6 caractères au minimum.</p>}
           </div>
-          {erreur && <p role="alert" className="rounded-lg border border-ruban/60 bg-ruban/10 px-4 py-3">{erreur}</p>}
-          {info && <p role="status" className="rounded-lg border border-trait bg-laiton/10 px-4 py-3">{info}</p>}
-          <button type="submit" className="btn btn-rouge" disabled={charge}>
+          {erreur && <p role="alert" className="rounded-lg border border-emeraude/60 bg-emeraude/10 px-4 py-3">{erreur}</p>}
+          {info && <p role="status" className="rounded-lg border border-trait bg-jade/10 px-4 py-3">{info}</p>}
+          <button type="submit" className="btn btn-primaire" disabled={charge}>
             {charge ? "Un instant…" : creation ? "Créer mon compte" : "Me connecter"}
           </button>
           <button
             type="button"
-            className="text-laiton underline underline-offset-4"
+            className="text-jade underline underline-offset-4"
             onClick={() => {
               setMode(creation ? "connexion" : "creation");
               setErreur("");
@@ -253,7 +253,7 @@ function Tableau({ client, onLogout }: { client: Client; onLogout: () => void })
         ) : resas.length === 0 ? (
           <Vide>
             <p>Vous n'avez pas encore de réservation avec cet e-mail.</p>
-            <Link href="/#reservation" className="btn btn-rouge mt-5">Réserver un tournage</Link>
+            <Link href="/#reservation" className="btn btn-primaire mt-5">Réserver un tournage</Link>
           </Vide>
         ) : (
           <ul className="grid gap-4">
@@ -287,7 +287,7 @@ function Tableau({ client, onLogout }: { client: Client; onLogout: () => void })
                   <p className="break-words text-[1.1rem] font-bold">{l.nom}</p>
                   <p className="text-brume">{[l.type, l.note].filter(Boolean).join(", ")}</p>
                 </div>
-                <a href={l.url} target="_blank" rel="noopener" className="btn btn-rouge">
+                <a href={l.url} target="_blank" rel="noopener" className="btn btn-primaire">
                   <Download size={18} aria-hidden />
                   Télécharger
                 </a>

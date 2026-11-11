@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { MotionConfig } from "motion/react";
 import { Booking } from "@/components/booking";
 import { Contact, Footer } from "@/components/contact";
+import { DemoPortant } from "@/components/demo-portant";
 import { Faq } from "@/components/faq";
 import { Gallery } from "@/components/gallery";
 import { Header } from "@/components/header";
@@ -38,7 +39,8 @@ export default function Accueil() {
     <MotionConfig reducedMotion="user">
       <Header />
       <main id="contenu">
-        <Hero une={medias?.[0] ?? null} />
+        <Hero />
+        <DemoPortant />
         <Services />
         <Gallery medias={medias} erreur={erreur} recharger={charger} />
         <Reviews />

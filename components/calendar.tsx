@@ -24,13 +24,13 @@ export function Calendar({
   const moisPasse = y === auj.getFullYear() && m === auj.getMonth();
 
   return (
-    <div className="rounded-[0.6rem] border border-papier/15 bg-nuit p-3">
+    <div className="rounded-[0.6rem] border border-papier/15 bg-encre p-3">
       <div className="flex items-center justify-between">
         <button
           type="button"
           disabled={moisPasse}
           onClick={() => setVue(new Date(y, m - 1, 1))}
-          className="grid size-10 place-items-center rounded-full text-laiton hover:bg-ardoise-2 disabled:opacity-30"
+          className="grid size-10 place-items-center rounded-full text-jade hover:bg-foret-2 disabled:opacity-30"
         >
           <ChevronLeft size={20} aria-hidden />
           <span className="sr-only">Mois précédent</span>
@@ -41,7 +41,7 @@ export function Calendar({
         <button
           type="button"
           onClick={() => setVue(new Date(y, m + 1, 1))}
-          className="grid size-10 place-items-center rounded-full text-laiton hover:bg-ardoise-2"
+          className="grid size-10 place-items-center rounded-full text-jade hover:bg-foret-2"
         >
           <ChevronRight size={20} aria-hidden />
           <span className="sr-only">Mois suivant</span>
@@ -74,10 +74,10 @@ export function Calendar({
               onClick={() => onChange(d)}
               className={`mx-auto grid aspect-square w-full max-w-11 place-items-center rounded-full text-[0.95rem] tabular-nums transition-colors ${
                 choisi
-                  ? "bg-ruban font-bold text-white"
+                  ? "bg-emeraude font-bold text-white"
                   : passe
                     ? "text-brume/35"
-                    : `hover:bg-ardoise-2 ${estAuj ? "font-bold text-laiton ring-1 ring-inset ring-trait" : ""}`
+                    : `hover:bg-foret-2 ${estAuj ? "font-bold text-jade ring-1 ring-inset ring-trait" : ""}`
               }`}
             >
               {i + 1}

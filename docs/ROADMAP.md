@@ -3,7 +3,7 @@
 | Phase | Contenu | Validation | État |
 | --- | --- | --- | --- |
 | 0 | Audit, gouvernance, agents, skills, documentation, garde-fou d'indépendance | Le propriétaire comprend l'architecture et les fichiers créés | **Terminée, à valider** |
-| 1 | Design system émeraude et or, navigation, nouvel accueil avec aperçu du simulateur | Parcours principal testable sur mobile et ordinateur | À venir |
+| 1 | Design system émeraude et or, navigation, nouvel accueil avec aperçu du simulateur | Parcours principal testable sur mobile et ordinateur | **En cours** : palette, mini-simulateur et première démo faits ; navigation à 10 entrées, univers, packs et passage à `src/` restent à faire |
 | 2 | Flux Explorer, bibliothèque, filtres, fiches, favoris locaux | Découverte fonctionnelle avec données de démonstration étiquetées | |
 | 3 | Simulateur « Zoé Site Studio » | Chaque choix modifie réellement l'aperçu et le brief | |
 | 4 | Services, packs, brief, WhatsApp | Une demande arrive de façon fiable dans l'administration | |

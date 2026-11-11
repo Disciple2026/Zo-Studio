@@ -1,20 +1,34 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+/* Le site est sombre en permanence : la variante dark suit la classe posée sur <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
 @import "@fontsource-variable/sofia-sans/wght.css";
 @import "@fontsource-variable/sofia-sans-extra-condensed/wght.css";
 @import "@fontsource-variable/newsreader/wght.css";
 @import "@fontsource-variable/newsreader/wght-italic.css";
 
-/* Palette tirée du logo : ardoise bleutée, ruban rouge, filets de laiton. */
 @theme {
-  --color-nuit: #151a24;
-  --color-ardoise: #1e2531;
-  --color-ardoise-2: #283040;
-  --color-papier: #f0ebe1;
-  --color-brume: #a3abb9;
-  --color-laiton: #cba665;
-  --color-ruban: #d62839;
-  --color-ruban-fonce: #a81829;
-  --color-trait: rgb(203 166 101 / 0.28);
+  /* Direction artistique du cahier des charges : noir profond, émeraude, or en accent, ivoire. */
+  --color-encre: #070b0a;
+  --color-foret: #0e1a16;
+  --color-foret-2: #182a24;
+  --color-papier: #f3efe6;
+  --color-brume: #9daaa5;
+  --color-jade: #3fd9ae;
+  --color-emeraude: #0b7f63;
+  --color-emeraude-fonce: #096a53;
+  --color-or: #d4af6a;
+  --color-trait: rgb(243 239 230 / 0.14);
+
+  /* Noms attendus par les composants au format shadcn (components/ui). */
+  --color-background: var(--color-encre);
+  --color-foreground: var(--color-papier);
+  --color-card: var(--color-foret);
+  --color-card-foreground: var(--color-papier);
+  --color-muted-foreground: var(--color-brume);
+  --color-border: var(--color-trait);
+  --color-ring: var(--color-jade);
 
   --font-sans: "Sofia Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --font-affiche: "Sofia Sans Extra Condensed Variable", "Arial Narrow", sans-serif;
@@ -27,10 +41,10 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
-    background: var(--color-nuit);
+    background: var(--color-encre);
   }
   body {
-    background: var(--color-nuit);
+    background: var(--color-encre);
     color: var(--color-papier);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
@@ -38,11 +52,11 @@
     -webkit-font-smoothing: antialiased;
   }
   ::selection {
-    background: var(--color-ruban);
+    background: var(--color-emeraude);
     color: #fff;
   }
   :focus-visible {
-    outline: 2px solid var(--color-laiton);
+    outline: 2px solid var(--color-jade);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -115,16 +129,16 @@
     opacity: 0.55;
     cursor: not-allowed;
   }
-  .btn-rouge {
-    background: var(--color-ruban);
+  .btn-primaire {
+    background: var(--color-emeraude);
     color: #fff;
   }
-  .btn-rouge:hover:not(:disabled) {
-    background: var(--color-ruban-fonce);
+  .btn-primaire:hover:not(:disabled) {
+    background: var(--color-emeraude-fonce);
   }
   .btn-clair {
     background: var(--color-papier);
-    color: var(--color-nuit);
+    color: var(--color-encre);
   }
   .btn-clair:hover:not(:disabled) {
     background: #fff;
@@ -134,8 +148,8 @@
     color: var(--color-papier);
   }
   .btn-ligne:hover:not(:disabled) {
-    border-color: var(--color-laiton);
-    color: var(--color-laiton);
+    border-color: var(--color-jade);
+    color: var(--color-jade);
   }
   .btn-sm {
     min-height: 2.25rem;
@@ -149,7 +163,7 @@
     min-height: 3rem;
     padding: 0.7rem 0.9rem;
     border-radius: 0.6rem;
-    background: var(--color-nuit);
+    background: var(--color-encre);
     border: 1px solid rgb(240 235 225 / 0.16);
     color: var(--color-papier);
     font-size: 1rem;
@@ -163,13 +177,13 @@
   }
   .champ:focus {
     outline: none;
-    border-color: var(--color-laiton);
-    box-shadow: 0 0 0 3px rgb(203 166 101 / 0.22);
+    border-color: var(--color-jade);
+    box-shadow: 0 0 0 3px rgb(63 217 174 / 0.22);
   }
   select.champ {
     appearance: none;
     padding-right: 2.4rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23cba665' stroke-width='1.6'%3E%3Cpath d='m1 1.5 5 5 5-5'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%233fd9ae' stroke-width='1.6'%3E%3Cpath d='m1 1.5 5 5 5-5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.9rem center;
   }
@@ -187,7 +201,7 @@
 
   /* Panneau au grand coin arrondi, repris des filets du logo. */
   .panneau {
-    background: var(--color-ardoise);
+    background: var(--color-foret);
     border: 1px solid var(--color-trait);
     border-radius: 0.9rem;
   }
@@ -205,8 +219,8 @@
     font-weight: 700;
   }
   .pastille-new {
-    background: rgb(203 166 101 / 0.16);
-    color: var(--color-laiton);
+    background: rgb(212 175 106 / 0.16);
+    color: var(--color-or);
   }
   .pastille-confirmed {
     background: rgb(74 190 130 / 0.16);
@@ -230,7 +244,7 @@
   }
   .onglet[aria-selected="true"] {
     color: var(--color-papier);
-    border-color: var(--color-ruban);
+    border-color: var(--color-emeraude);
   }
 }
 

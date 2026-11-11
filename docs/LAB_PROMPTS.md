@@ -109,6 +109,19 @@ reproduire un site « à l'identique » ne donne pas, tel quel, un modèle que Z
   créer ou à prendre sous licence CC0.
 - **Mécaniques à retenir** : produit qui suit le curseur, changement de variante chorégraphié.
 
+### 9. Portant de vêtements (composant React, reçu le 11 novembre 2026)
+- **Nature** : un composant React à intégrer, et non un site entier. Origine : la bibliothèque de
+  composants 21st.dev. Sa licence d'utilisation n'a pas été vérifiée.
+- **Dépend de** : 30 photos de vêtements hébergées sur `cdn.21st.dev`, portant des noms de marques
+  tierces. **Aucune n'est utilisée.**
+- **Recréation** : le composant sait dessiner lui-même six types de vêtements en SVG. La démo
+  intégrée utilise uniquement ces dessins, avec une boutique, des pièces et des prix inventés.
+  Aucune bibliothèque supplémentaire, hormis `tw-animate-css` pour un fondu.
+- **Intégré** : `components/ui/product-rail-gallery.tsx` (code d'origine inchangé),
+  `components/demo-portant.tsx`, `lib/demo-portant.ts`. Visible sur l'accueil, section « Démo ».
+- **Statut** : démonstration étiquetée comme telle. Licence du composant à confirmer avant de le
+  proposer comme Base personnalisable.
+
 ## Ordre de construction recommandé pour le Lab
 
 1. **Gravity** (aucune ressource à produire) : valide toute la chaîne du Lab.

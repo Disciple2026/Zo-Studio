@@ -5,7 +5,7 @@ import { Logo } from "./logo";
 
 export function Contact() {
   return (
-    <section id="contact" className="bg-ruban text-white">
+    <section id="contact" className="bg-emeraude text-white">
       <div className="wrap bloc grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div>
           <h2 className="affiche text-[clamp(3.2rem,10vw,8rem)]">Parlons de votre projet</h2>

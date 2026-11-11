@@ -32,11 +32,11 @@ export function Chat({
             <div
               key={m.id}
               className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
-                mien ? "self-end rounded-br-sm bg-ruban text-white" : "self-start rounded-bl-sm bg-ardoise-2"
+                mien ? "self-end rounded-br-sm bg-emeraude text-white" : "self-start rounded-bl-sm bg-foret-2"
               }`}
             >
               {!mien && (
-                <p className="text-sm font-bold text-laiton">
+                <p className="text-sm font-bold text-jade">
                   {m.from_role === "admin" ? "Zoé Studio" : "Client"}
                 </p>
               )}
@@ -73,7 +73,7 @@ export function Chat({
           placeholder="Écrire un message"
           autoComplete="off"
         />
-        <button type="submit" className="btn btn-rouge shrink-0" disabled={!texte.trim()}>
+        <button type="submit" className="btn btn-primaire shrink-0" disabled={!texte.trim()}>
           <Send size={18} aria-hidden />
           <span className="max-sm:sr-only">Envoyer</span>
         </button>

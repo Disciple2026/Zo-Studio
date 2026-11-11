@@ -7,7 +7,8 @@ import { List, X } from "lucide-react";
    la tête de lecture suit le défilement et le timecode avance avec elle. */
 
 const CLIPS = [
-  { id: "accueil", label: "Ouverture" },
+  { id: "accueil", label: "Simulateur" },
+  { id: "demo", label: "Démo" },
   { id: "services", label: "Services" },
   { id: "realisations", label: "Réalisations" },
   { id: "avis", label: "Avis" },
@@ -78,7 +79,7 @@ export function Timeline() {
   return (
     <nav
       aria-label="Sections de la page"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-trait bg-nuit/92 backdrop-blur-md"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-trait bg-encre/92 backdrop-blur-md"
     >
       {menu && (
         <ul className="wrap grid gap-1 border-b border-trait py-3 md:hidden">
@@ -89,11 +90,11 @@ export function Timeline() {
                 onClick={() => setMenu(false)}
                 aria-current={i === actif ? "true" : undefined}
                 className={`flex min-h-11 items-center justify-between rounded-lg px-3 font-bold ${
-                  i === actif ? "bg-ardoise-2 text-papier" : "text-brume"
+                  i === actif ? "bg-foret-2 text-papier" : "text-brume"
                 }`}
               >
                 {c.label}
-                {i === actif && <span className="size-2 rounded-full bg-ruban" aria-hidden />}
+                {i === actif && <span className="size-2 rounded-full bg-emeraude" aria-hidden />}
               </a>
             </li>
           ))}
@@ -104,7 +105,7 @@ export function Timeline() {
         <span
           ref={tc}
           aria-hidden
-          className="w-[5.6rem] shrink-0 text-[0.86rem] md:w-[6.2rem] md:text-[0.95rem] font-semibold tabular-nums tracking-wide text-laiton"
+          className="w-[5.6rem] shrink-0 text-[0.86rem] md:w-[6.2rem] md:text-[0.95rem] font-semibold tabular-nums tracking-wide text-jade"
         >
           00:00:00:00
         </span>
@@ -118,8 +119,8 @@ export function Timeline() {
               aria-current={i === actif ? "true" : undefined}
               className={`group flex min-w-0 items-center overflow-hidden rounded-[5px] border text-[0.82rem] md:px-2 font-bold transition-colors max-md:pointer-events-none ${
                 i === actif
-                  ? "border-laiton/70 bg-ardoise-2 text-papier"
-                  : "border-papier/10 bg-ardoise text-brume hover:border-laiton/50 hover:text-papier"
+                  ? "border-jade/70 bg-foret-2 text-papier"
+                  : "border-papier/10 bg-foret text-brume hover:border-jade/50 hover:text-papier"
               }`}
             >
               <span className="truncate max-md:sr-only">{c.label}</span>
@@ -128,10 +129,10 @@ export function Timeline() {
           <div
             ref={tete}
             aria-hidden
-            className="pointer-events-none absolute -bottom-2 -top-2 w-0.5 -translate-x-1/2 bg-ruban"
+            className="pointer-events-none absolute -bottom-2 -top-2 w-0.5 -translate-x-1/2 bg-emeraude"
             style={{ left: 0 }}
           >
-            <span className="absolute -top-0.5 left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-[2px] bg-ruban" />
+            <span className="absolute -top-0.5 left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-[2px] bg-emeraude" />
           </div>
         </div>
 

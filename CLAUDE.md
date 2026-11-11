@@ -11,6 +11,12 @@ de son futur site, puis confie la réalisation à Zoé Studio (Tanger, Maroc).
 ## État actuel (mis à jour à chaque phase)
 
 - Phase 0 terminée : audit, gouvernance, documentation. Voir `docs/ROADMAP.md`.
+- Phase 1 en cours : palette émeraude et or, mini-simulateur en tête d'accueil
+  (`components/hero.tsx`, données dans `lib/simulateur.ts`), démo « portant » d'une boutique
+  fictive (`components/ui/product-rail-gallery.tsx`, données dans `lib/demo-portant.ts`).
+- Les composants au format shadcn vont dans `components/ui/` ; leurs couleurs
+  (`background`, `foreground`, `card`, `muted-foreground`, `border`, `ring`) sont reliées à la
+  palette dans `app/globals.css`.
 - Le code en place est la refonte du site « production vidéo » (accueil, réservation, espace client,
   administration). Il sert de base technique ; son contenu et sa direction artistique seront
   remplacés pendant les phases 1 à 4.

@@ -27,7 +27,7 @@ export function Gallery({ medias, erreur, recharger }: Props) {
   const label = (id: string) => CATEGORIES.find((c) => c.id === id)?.label ?? id;
 
   return (
-    <section id="realisations" className="bloc border-t border-trait bg-ardoise/40">
+    <section id="realisations" className="bloc border-t border-trait bg-foret/40">
       <div className="wrap">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="titre">Réalisations</h2>
@@ -59,7 +59,7 @@ export function Gallery({ medias, erreur, recharger }: Props) {
           ) : medias === null ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="aspect-[4/3] animate-pulse rounded-xl bg-ardoise-2/60" />
+                <div key={i} className="aspect-[4/3] animate-pulse rounded-xl bg-foret-2/60" />
               ))}
             </div>
           ) : medias.length === 0 ? (
@@ -86,7 +86,7 @@ export function Gallery({ medias, erreur, recharger }: Props) {
                   <button
                     type="button"
                     onClick={() => setOuvert(m)}
-                    className={`group relative block size-full overflow-hidden rounded-xl bg-ardoise-2 text-left ${
+                    className={`group relative block size-full overflow-hidden rounded-xl bg-foret-2 text-left ${
                       i === 0 ? "aspect-[4/3] rounded-tl-[3.5rem]" : "aspect-[4/3]"
                     }`}
                   >
@@ -107,13 +107,13 @@ export function Gallery({ medias, erreur, recharger }: Props) {
                         className="size-full object-cover transition-transform duration-700 ease-cine group-hover:scale-[1.04]"
                       />
                     )}
-                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-nuit/95 to-transparent p-4 pt-14">
+                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-encre/95 to-transparent p-4 pt-14">
                       <span>
                         <span className="block text-[1.05rem] font-bold leading-tight">{m.titre}</span>
                         <span className="text-sm text-brume">{label(m.categorie)}</span>
                       </span>
                       {m.type === "video" && (
-                        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ruban text-white">
+                        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-emeraude text-white">
                           <Play size={18} fill="currentColor" aria-hidden />
                           <span className="sr-only">Lire la vidéo</span>
                         </span>
@@ -132,7 +132,7 @@ export function Gallery({ medias, erreur, recharger }: Props) {
         onClose={() => setOuvert(null)}
         onClick={(e) => e.target === dialog.current && setOuvert(null)}
         aria-label={ouvert?.titre}
-        className="m-auto max-h-[92dvh] w-[min(92vw,70rem)] bg-transparent p-0 text-papier backdrop:bg-nuit/90 backdrop:backdrop-blur-sm"
+        className="m-auto max-h-[92dvh] w-[min(92vw,70rem)] bg-transparent p-0 text-papier backdrop:bg-encre/90 backdrop:backdrop-blur-sm"
       >
         {ouvert && (
           <div>

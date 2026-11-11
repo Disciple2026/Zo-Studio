@@ -18,13 +18,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#151a24",
+  themeColor: "#070b0a",
   colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="dark">
       <body>
         <a
           href="#contenu"

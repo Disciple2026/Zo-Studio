@@ -89,7 +89,7 @@ export function Booking() {
   }
 
   return (
-    <section id="reservation" className="bloc border-t border-trait bg-ardoise/40">
+    <section id="reservation" className="bloc border-t border-trait bg-foret/40">
       <div className="wrap grid gap-x-16 gap-y-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
           <h2 className="titre">Réserver un tournage</h2>
@@ -99,7 +99,7 @@ export function Booking() {
           <ol className="mt-9 max-w-md">
             {ETAPES.map((e, i) => (
               <li key={e.t} className="grid grid-cols-[3.2rem_1fr] border-t border-trait py-4 last:border-b">
-                <span className="affiche text-[2.4rem] text-laiton">{i + 1}</span>
+                <span className="affiche text-[2.4rem] text-jade">{i + 1}</span>
                 <p>
                   <span className="block font-bold">{e.t}</span>
                   <span className="text-brume">{e.d}</span>
@@ -111,14 +111,14 @@ export function Booking() {
 
         {etat === "envoye" ? (
           <div className="panneau panneau-coin self-start p-8 md:p-12" role="status">
-            <CircleCheck size={44} className="text-laiton" aria-hidden />
+            <CircleCheck size={44} className="text-jade" aria-hidden />
             <h3 className="affiche mt-5 text-[clamp(2.2rem,5vw,3.5rem)]">Demande envoyée</h3>
             <p className="mt-4 max-w-lg text-[1.1rem] text-brume">
               Nous vous rappelons sous 24 h pour préciser les détails. Créez votre espace client
               avec le même e-mail pour suivre la réservation et discuter avec l'équipe.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/espace/" className="btn btn-rouge">
+              <Link href="/espace/" className="btn btn-primaire">
                 Ouvrir mon espace
               </Link>
               <button
@@ -170,7 +170,7 @@ export function Booking() {
               <fieldset>
                 <legend className="etiquette">
                   Date du tournage
-                  <span className="ml-2 font-normal text-laiton">{date ? fmt(date) : ""}</span>
+                  <span className="ml-2 font-normal text-jade">{date ? fmt(date) : ""}</span>
                 </legend>
                 <Calendar value={date} onChange={(d) => { setDate(d); setErreur(""); }} />
               </fieldset>
@@ -213,7 +213,7 @@ export function Booking() {
             </div>
 
             {erreur && (
-              <p role="alert" className="rounded-lg border border-ruban/60 bg-ruban/10 px-4 py-3">
+              <p role="alert" className="rounded-lg border border-emeraude/60 bg-emeraude/10 px-4 py-3">
                 {erreur}{" "}
                 {erreur.includes("WhatsApp") && (
                   <a href={WHATSAPP} target="_blank" rel="noopener" className="font-bold underline">
@@ -222,7 +222,7 @@ export function Booking() {
                 )}
               </p>
             )}
-            <button type="submit" className="btn btn-rouge min-h-14 text-[1.1rem]" disabled={etat === "envoi"}>
+            <button type="submit" className="btn btn-primaire min-h-14 text-[1.1rem]" disabled={etat === "envoi"}>
               {etat === "envoi" ? "Envoi de la demande…" : "Envoyer la demande"}
             </button>
           </form>

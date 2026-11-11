@@ -13,7 +13,7 @@ export function Logo({ href = "/" }: { href?: string }) {
         priority
         className="size-10 rounded-lg ring-1 ring-trait"
       />
-      <span className="font-serif text-[1.35rem] leading-none tracking-wide text-laiton">
+      <span className="font-serif text-[1.35rem] leading-none tracking-wide text-or">
         Zoé Studio
       </span>
     </Link>

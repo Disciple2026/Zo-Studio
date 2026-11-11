@@ -53,7 +53,7 @@ export function Onglets<T extends string>({
         >
           {o.label}
           {!!o.badge && (
-            <span className="ml-2 rounded-full bg-ruban px-2 py-0.5 text-xs text-white">{o.badge}</span>
+            <span className="ml-2 rounded-full bg-emeraude px-2 py-0.5 text-xs text-white">{o.badge}</span>
           )}
         </button>
       ))}

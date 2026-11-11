@@ -17,7 +17,7 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
-        scrolled ? "border-b border-trait bg-nuit/85 backdrop-blur-md" : "border-b border-transparent"
+        scrolled ? "border-b border-trait bg-encre/85 backdrop-blur-md" : "border-b border-transparent"
       }`}
     >
       <div className="wrap flex h-16 items-center justify-between gap-4">
@@ -27,7 +27,7 @@ export function Header() {
             <UserRound size={16} aria-hidden />
             <span className="max-sm:hidden">Mon espace</span>
           </Link>
-          <a href="#reservation" className="btn btn-rouge btn-sm">
+          <a href="#reservation" className="btn btn-primaire btn-sm">
             Réserver
           </a>
         </nav>

@@ -56,8 +56,8 @@ function Porte({ onOk }: { onOk: () => void }) {
             <label htmlFor="a-pwd" className="etiquette">Mot de passe</label>
             <input id="a-pwd" name="pwd" type="password" className="champ" autoComplete="current-password" required autoFocus />
           </div>
-          {erreur && <p role="alert" className="rounded-lg border border-ruban/60 bg-ruban/10 px-4 py-3">Mot de passe incorrect.</p>}
-          <button type="submit" className="btn btn-rouge">Ouvrir l'administration</button>
+          {erreur && <p role="alert" className="rounded-lg border border-emeraude/60 bg-emeraude/10 px-4 py-3">Mot de passe incorrect.</p>}
+          <button type="submit" className="btn btn-primaire">Ouvrir l'administration</button>
         </form>
       </div>
     </Shell>
@@ -107,7 +107,7 @@ function Panneau({ onLogout }: { onLogout: () => void }) {
   return (
     <Shell droite={<button type="button" onClick={onLogout} className="btn btn-ligne btn-sm">Verrouiller</button>}>
       <h1 className="titre mb-8">Administration</h1>
-      {erreur && <p role="alert" className="mb-6 rounded-lg border border-ruban/60 bg-ruban/10 px-4 py-3">{erreur}</p>}
+      {erreur && <p role="alert" className="mb-6 rounded-lg border border-emeraude/60 bg-emeraude/10 px-4 py-3">{erreur}</p>}
       <Onglets<Tab>
         actif={tab}
         onChange={setTab}
@@ -171,11 +171,11 @@ function Reservations({ resas, lire }: { resas: Reservation[]; lire: () => Promi
       </div>
       <ul className="grid gap-4">
         {resas.map((r) => (
-          <li key={r.id} className={`panneau p-5 sm:p-6 ${r.statut === "new" ? "border-l-4 border-l-laiton" : ""}`}>
+          <li key={r.id} className={`panneau p-5 sm:p-6 ${r.statut === "new" ? "border-l-4 border-l-jade" : ""}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-[1.25rem] font-bold">{r.client_nom}</h2>
-                <p className="text-laiton">{r.service}{r.budget ? `, ${r.budget}` : ""}</p>
+                <p className="text-jade">{r.service}{r.budget ? `, ${r.budget}` : ""}</p>
               </div>
               <span className={`pastille pastille-${r.statut}`}>{BADGE[r.statut] ?? r.statut}</span>
             </div>
@@ -254,13 +254,13 @@ function Discussions({ messages, lire }: { messages: Message[]; lire: () => Prom
               type="button"
               onClick={() => setEmail(e)}
               aria-current={e === email ? "true" : undefined}
-              className={`flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-ardoise-2 ${e === email ? "bg-ardoise-2" : ""}`}
+              className={`flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-foret-2 ${e === email ? "bg-foret-2" : ""}`}
             >
               <span className="min-w-0">
                 <span className={`block truncate ${c.nonLus ? "font-bold" : ""}`}>{e}</span>
                 <span className="block truncate text-sm text-brume">{c.dernier.contenu}</span>
               </span>
-              {c.nonLus > 0 && <span className="rounded-full bg-ruban px-2 py-0.5 text-xs font-bold text-white">{c.nonLus}</span>}
+              {c.nonLus > 0 && <span className="rounded-full bg-emeraude px-2 py-0.5 text-xs font-bold text-white">{c.nonLus}</span>}
             </button>
           </li>
         ))}
@@ -351,7 +351,7 @@ function GalerieAdmin({ medias, lire }: { medias: Media[]; lire: () => Promise<v
         </div>
         <div>
           <label htmlFor="g-file" className="etiquette">Fichier photo ou vidéo</label>
-          <input ref={fichier} id="g-file" type="file" accept="image/*,video/*" className="champ file:mr-3 file:rounded-full file:border-0 file:bg-ardoise-2 file:px-3 file:py-1 file:text-papier" />
+          <input ref={fichier} id="g-file" type="file" accept="image/*,video/*" className="champ file:mr-3 file:rounded-full file:border-0 file:bg-foret-2 file:px-3 file:py-1 file:text-papier" />
         </div>
         <p className="text-center text-brume">ou</p>
         <div className="grid grid-cols-[7.5rem_1fr] gap-3">
@@ -367,7 +367,7 @@ function GalerieAdmin({ medias, lire }: { medias: Media[]; lire: () => Promise<v
             <input id="g-url" name="url" type="url" className="champ" placeholder="https://" />
           </div>
         </div>
-        <button type="submit" className="btn btn-rouge">
+        <button type="submit" className="btn btn-primaire">
           <Upload size={18} aria-hidden />
           Publier dans la galerie
         </button>
@@ -388,7 +388,7 @@ function GalerieAdmin({ medias, lire }: { medias: Media[]; lire: () => Promise<v
               )}
               <div className="flex items-center justify-between gap-2 p-3">
                 <p className="min-w-0 truncate text-[0.95rem] font-bold">{m.titre}</p>
-                <button type="button" onClick={() => supprimer(m)} className="grid size-9 shrink-0 place-items-center rounded-full text-brume hover:bg-ruban hover:text-white">
+                <button type="button" onClick={() => supprimer(m)} className="grid size-9 shrink-0 place-items-center rounded-full text-brume hover:bg-emeraude hover:text-white">
                   <Trash2 size={16} aria-hidden />
                   <span className="sr-only">Retirer {m.titre}</span>
                 </button>
@@ -460,7 +460,7 @@ function Livrables({ livrables, lire }: { livrables: Livrable[]; lire: () => Pro
           <label htmlFor="l-note" className="etiquette">Note pour le client (facultatif)</label>
           <input id="l-note" name="note" className="champ" />
         </div>
-        <button type="submit" className="btn btn-rouge">Envoyer au client</button>
+        <button type="submit" className="btn btn-primaire">Envoyer au client</button>
         {etat && <p role="status" className="text-brume">{etat}</p>}
       </form>
 
@@ -515,7 +515,7 @@ function Stats({ resas, medias, nonLus }: { resas: Reservation[]; medias: Media[
         {tuiles.map((t) => (
           <div key={t.l} className="panneau flex flex-col-reverse p-5">
             <dt className="text-brume">{t.l}</dt>
-            <dd className="affiche text-[3.2rem] text-laiton">{t.n}</dd>
+            <dd className="affiche text-[3.2rem] text-jade">{t.n}</dd>
           </div>
         ))}
       </dl>
@@ -527,8 +527,8 @@ function Stats({ resas, medias, nonLus }: { resas: Reservation[]; medias: Media[
           {parService.map(([s, n]) => (
             <li key={s} className="grid grid-cols-[minmax(0,14rem)_1fr_2rem] items-center gap-4">
               <span className="truncate">{s}</span>
-              <span className="h-3 rounded-full bg-ardoise-2">
-                <span className="block h-full rounded-full bg-laiton" style={{ width: `${(n / max) * 100}%` }} />
+              <span className="h-3 rounded-full bg-foret-2">
+                <span className="block h-full rounded-full bg-jade" style={{ width: `${(n / max) * 100}%` }} />
               </span>
               <span className="text-right font-bold tabular-nums">{n}</span>
             </li>

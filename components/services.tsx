@@ -23,14 +23,14 @@ export function Services() {
                 onClick={() =>
                   window.dispatchEvent(new CustomEvent("zoe:service", { detail: s.option }))
                 }
-                className="group grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-1 py-5 transition-colors hover:bg-ardoise sm:px-4 md:py-6"
+                className="group grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-1 py-5 transition-colors hover:bg-foret sm:px-4 md:py-6"
               >
-                <h3 className="affiche text-[clamp(1.9rem,4vw,2.9rem)] transition-colors group-hover:text-laiton">
+                <h3 className="affiche text-[clamp(1.9rem,4vw,2.9rem)] transition-colors group-hover:text-jade">
                   {s.nom}
                 </h3>
                 <span
                   aria-hidden
-                  className="row-span-2 grid size-11 place-items-center rounded-full border border-trait text-brume transition-all duration-300 group-hover:border-ruban group-hover:bg-ruban group-hover:text-white"
+                  className="row-span-2 grid size-11 place-items-center rounded-full border border-trait text-brume transition-all duration-300 group-hover:border-emeraude group-hover:bg-emeraude group-hover:text-white"
                 >
                   <ArrowUpRight size={20} />
                 </span>
