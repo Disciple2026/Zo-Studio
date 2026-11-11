@@ -13,15 +13,23 @@ réalisation de Zoé Studio.
 
 ## Règle d'indépendance : si leur site casse, le vôtre ne casse pas
 
-1. **Aucun lien direct vers un fichier tiers.** Image, vidéo, modèle 3D, texture : tout fichier
-   affiché est stocké dans le dépôt ou dans le stockage de Zoé Studio.
-2. **Bibliothèques installées par npm à version figée**, jamais par balise `<script>` vers un CDN.
-3. **Polices auto-hébergées** (Fontsource ou fichiers locaux sous licence vérifiée).
-4. **Une démo = un dossier isolé.** Une démo en panne n'affecte que sa propre page ; la fiche du
-   catalogue garde sa miniature et son texte.
-5. **Repli prévu** : image de remplacement pour chaque vidéo, version statique si WebGL manque.
-6. **Contrôle automatique** : `npm run check:external` échoue dès qu'un hôte non autorisé apparaît
-   dans le code. Il s'exécute à chaque construction.
+Décision du propriétaire, 11 novembre 2026 : les images et technologies hébergées par les auteurs
+des modèles peuvent être utilisées, à condition qu'une version de repli prenne le relais le jour
+où elles ne répondent plus.
+
+1. **Local d'abord.** Chaque démo s'affiche avec une version construite par Zoé Studio.
+2. **Distant ensuite, tout ou rien.** `useRessourcesDistantes` (`lib/remote.ts`) précharge les
+   fichiers tiers ; la version enrichie ne remplace la version locale que si tous ont répondu
+   dans le délai. Une panne, un fichier supprimé ou un réseau lent laissent la démo intacte.
+3. **Repli déclaré.** Tout fichier citant un hébergeur tiers porte un commentaire `repli: …`.
+   `npm run check:external` échoue sinon.
+4. **Bibliothèques et polices par npm**, à version figée : un script chargé depuis un CDN qui
+   tombe ne peut pas être remplacé à la volée.
+5. **Une démo = un dossier isolé.** Une démo en panne n'affecte que sa propre page.
+
+Ce choix règle la disponibilité, pas les droits : les licences des fichiers tiers restent
+inconnues. Avant de vendre une démo comme modèle, ses visuels sont à remplacer par des ressources
+de Zoé Studio. Le repli local en est le point de départ.
 
 ## Ce qu'on peut reprendre d'un prompt tiers, et ce qu'on ne peut pas
 

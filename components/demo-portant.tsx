@@ -1,9 +1,12 @@
 "use client";
 
 import ClothingRailHero from "@/components/ui/product-rail-gallery";
-import { PORTANT } from "@/lib/demo-portant";
+import { PORTANT, PORTANT_DESSINE, PORTANT_URLS } from "@/lib/demo-portant";
+import { useRessourcesDistantes } from "@/lib/remote";
 
 export function DemoPortant() {
+  // Les photos distantes ne remplacent les dessins que si elles ont toutes répondu.
+  const photos = useRessourcesDistantes(PORTANT_URLS);
   return (
     <section id="demo" className="border-t border-trait">
       <div className="wrap pt-[clamp(4.5rem,10vw,8.5rem)]">
@@ -18,8 +21,10 @@ export function DemoPortant() {
       </div>
 
       <ClothingRailHero
-        items={PORTANT}
-        hanger="wood"
+        key={photos ? "photos" : "dessins"}
+        items={photos ? PORTANT : PORTANT_DESSINE}
+        hanger={photos ? "none" : "wood"}
+        data-source={photos ? "distante" : "locale"}
         autoplay
         caption="Parcourez le portant, puis ouvrez une pièce pour voir son dos."
         labels={{ front: "Devant", back: "Dos", close: "Fermer", show: "Afficher" }}

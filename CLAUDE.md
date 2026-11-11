@@ -47,8 +47,10 @@ Supabase (Postgres, Auth, Storage, Realtime). Polices auto-hébergées via Fonts
 4. Aucun secret dans le dépôt ni dans le navigateur. Seules les variables `NEXT_PUBLIC_*` vont dans
    le code client. `.env*` est ignoré par Git, sauf `.env.example`.
 5. Jamais de RLS désactivée pour « faire marcher » une fonctionnalité.
-6. **Aucune ressource chargée depuis un site tiers** (image, vidéo, modèle 3D, police, script).
-   Tout est auto-hébergé ou installé par npm. `npm run check:external` le vérifie.
+6. **Ressources tierces seulement avec repli.** Une image, vidéo ou modèle hébergé ailleurs est
+   permis si le site s'affiche sans lui : version locale d'abord, version distante seulement si
+   elle répond (`lib/remote.ts`), et un commentaire `repli: …` dans le fichier. Bibliothèques et
+   polices restent installées par npm. `npm run check:external` le vérifie.
 7. Chaque référence de la bibliothèque porte un statut : Inspiration externe, Base personnalisable
    ou Zoé Original. Voir `docs/CONTENT_AND_LICENSES.md`.
 8. Pas de faux avis, de fausses statistiques, de boutons décoratifs ni de liens morts. Les données
@@ -58,16 +60,32 @@ Supabase (Postgres, Auth, Storage, Realtime). Polices auto-hébergées via Fonts
 11. L'assistant IA public est hors périmètre de la première version : aucune dépendance à l'API
     Claude.
 
+## Mode autonome
+
+Le propriétaire confie une mission et ne veut pas être sollicité pour les décisions internes.
+Claude principal est chef de projet et décideur final : il planifie, répartit, fait réaliser,
+fait critiquer, corrige, reteste et rend un rapport en dix points. Méthode complète dans
+`docs/WORKFLOW.md`, à dérouler avec la skill `run-mission`.
+
+Boucle : DÉVELOPPER → TESTER → CRITIQUER → CORRIGER → RETESTER → VALIDER, trois cycles au plus.
+Aucun travail n'est validé sur la seule parole de son auteur.
+
+S'arrêter et demander seulement avant : suppression de données ou de fichiers importants,
+migration de la base réelle, sécurité ou publication en production, DNS, dépense, message à un
+client, exposition d'un secret.
+
 ## Agents et skills
 
-Agents dans `.claude/agents/` : `ui-ux-designer`, `frontend-developer`, `backend-architect`,
-`qa-security-engineer`, `research-experience`. Claude principal reste responsable de
-l'architecture : il attribue une mission précise à un agent, n'en lance pas deux sur les mêmes
-fichiers, intègre le résultat puis relance les vérifications.
+Agents dans `.claude/agents/` : `ui-ux-designer` (directeur artistique), `frontend-developer`,
+`backend-architect`, `qa-security-engineer`, `critiqueur-independant`, `research-experience`.
+Deux agents n'écrivent jamais dans le même fichier pendant une mission. QA et critiqueur sont en
+lecture seule.
 
-Skills dans `.claude/skills/` : `build-showcase`, `create-site-demo`, `review-ui`, `release-check`.
+Skills dans `.claude/skills/` : `run-mission`, `build-showcase`, `create-site-demo`, `review-ui`,
+`release-check`.
 
 ## Documentation
 
 `docs/PRODUCT_VISION.md`, `ARCHITECTURE.md`, `DATABASE.md`, `SECURITY.md`, `DESIGN_SYSTEM.md`,
-`CONTENT_AND_LICENSES.md`, `LAB_PROMPTS.md`, `DEPLOYMENT.md`, `ROADMAP.md`.
+`CONTENT_AND_LICENSES.md`, `LAB_PROMPTS.md`, `DEPLOYMENT.md`, `ROADMAP.md`, `WORKFLOW.md`,
+`reviews/` (comptes rendus de revue).
