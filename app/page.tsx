@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { MotionConfig } from "motion/react";
 import { Booking } from "@/components/booking";
+import { Brief } from "@/components/brief";
+import { Univers } from "@/components/univers";
 import { Contact, Footer } from "@/components/contact";
 import { DemoPortant } from "@/components/demo-portant";
 import { Faq } from "@/components/faq";
@@ -12,7 +14,7 @@ import { Hero } from "@/components/hero";
 import { Reviews } from "@/components/reviews";
 import { Services } from "@/components/services";
 import { Timeline } from "@/components/timeline";
-import { sb, type Media } from "@/lib/supabase";
+import { avecDelai, sb, type Media } from "@/lib/supabase";
 
 export default function Accueil() {
   const [medias, setMedias] = useState<Media[] | null>(null);
@@ -21,10 +23,10 @@ export default function Accueil() {
   const charger = useCallback(async () => {
     setErreur(false);
     setMedias(null);
-    const { data, error } = await sb
-      .from("galerie")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data, error } = await avecDelai(
+      sb.from("galerie").select("*").order("created_at", { ascending: false }),
+      10000,
+    );
     if (error) {
       setErreur(true);
       setMedias([]);
@@ -41,6 +43,8 @@ export default function Accueil() {
       <main id="contenu">
         <Hero />
         <DemoPortant />
+        <Univers />
+        <Brief />
         <Services />
         <Gallery medias={medias} erreur={erreur} recharger={charger} />
         <Reviews />

@@ -71,3 +71,14 @@ export const isAdminUnlocked = () =>
   typeof window !== "undefined" && sessionStorage.getItem(ADMIN_FLAG) === "1";
 export const setAdminUnlocked = (on: boolean) =>
   on ? sessionStorage.setItem(ADMIN_FLAG, "1") : sessionStorage.removeItem(ADMIN_FLAG);
+
+/* Un appel resté sans réponse ne doit jamais bloquer l'interface : passé le délai, il compte
+   comme un échec et l'écran affiche son état d'erreur. */
+export function avecDelai<T extends { error: unknown }>(requete: PromiseLike<T>, ms = 12000) {
+  return Promise.race([
+    Promise.resolve(requete).catch(() => ({ error: new Error("réseau") }) as unknown as T),
+    new Promise<T>((ok) =>
+      setTimeout(() => ok({ error: new Error("délai dépassé"), data: null } as unknown as T), ms),
+    ),
+  ]);
+}

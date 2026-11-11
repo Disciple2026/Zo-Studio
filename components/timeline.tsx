@@ -3,29 +3,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { List, X } from "lucide-react";
 
-/* La navigation du site est une timeline de montage : chaque section est un clip,
-   la tête de lecture suit le défilement et le timecode avance avec elle. */
+/* Barre de navigation fixe : un segment par section, proportionnel à sa hauteur,
+   et un curseur qui suit le défilement. */
 
 const CLIPS = [
   { id: "accueil", label: "Simulateur" },
   { id: "demo", label: "Démo" },
-  { id: "services", label: "Services" },
+  { id: "univers", label: "Métiers" },
+  { id: "brief", label: "Brief" },
+  { id: "services", label: "Vidéo" },
   { id: "realisations", label: "Réalisations" },
   { id: "avis", label: "Avis" },
-  { id: "reservation", label: "Réservation" },
+  { id: "reservation", label: "Tournage" },
   { id: "questions", label: "Questions" },
   { id: "contact", label: "Contact" },
 ];
-
-const FPS = 25;
-const DUREE = 150; // secondes « de film » pour toute la page
-
-const pad = (n: number) => String(n).padStart(2, "0");
-function timecode(ratio: number) {
-  const f = Math.round(ratio * DUREE * FPS);
-  const s = Math.floor(f / FPS);
-  return `00:${pad(Math.floor(s / 60))}:${pad(s % 60)}:${pad(f % FPS)}`;
-}
 
 export function Timeline() {
   const [poids, setPoids] = useState<number[]>(CLIPS.map(() => 1));
@@ -33,7 +25,6 @@ export function Timeline() {
   const [menu, setMenu] = useState(false);
   const bornes = useRef<number[]>([]);
   const tete = useRef<HTMLDivElement>(null);
-  const tc = useRef<HTMLSpanElement>(null);
 
   const mesurer = useCallback(() => {
     const total = document.documentElement.scrollHeight;
@@ -54,7 +45,6 @@ export function Timeline() {
     const pos = window.scrollY + window.innerHeight * progres;
     const ratio = total > 0 ? pos / total : 0;
     if (tete.current) tete.current.style.left = `${ratio * 100}%`;
-    if (tc.current) tc.current.textContent = timecode(ratio);
     const b = bornes.current;
     let i = 0;
     while (i < CLIPS.length - 1 && pos >= b[i + 1]) i++;
@@ -102,14 +92,6 @@ export function Timeline() {
       )}
 
       <div className="wrap flex h-14 items-center gap-3 md:gap-4">
-        <span
-          ref={tc}
-          aria-hidden
-          className="w-[5.6rem] shrink-0 text-[0.86rem] md:w-[6.2rem] md:text-[0.95rem] font-semibold tabular-nums tracking-wide text-jade"
-        >
-          00:00:00:00
-        </span>
-
         <div className="relative flex h-8 min-w-0 flex-1 gap-[3px]">
           {CLIPS.map((c, i) => (
             <a

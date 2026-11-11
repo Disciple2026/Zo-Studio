@@ -30,7 +30,7 @@ export function Gallery({ medias, erreur, recharger }: Props) {
     <section id="realisations" className="bloc border-t border-trait bg-foret/40">
       <div className="wrap">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <h2 className="titre">Réalisations</h2>
+          <h2 className="titre">Réalisations vidéo</h2>
           {!!medias?.length && (
             <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrer par catégorie">
               {CATEGORIES.map((c) => (

@@ -27,8 +27,8 @@ export function Header() {
             <UserRound size={16} aria-hidden />
             <span className="max-sm:hidden">Mon espace</span>
           </Link>
-          <a href="#reservation" className="btn btn-primaire btn-sm">
-            Réserver
+          <a href="#brief" className="btn btn-primaire btn-sm">
+            Mon projet
           </a>
         </nav>
       </div>

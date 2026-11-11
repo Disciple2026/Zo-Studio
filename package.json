@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-external.mjs",
     "build": "next build",
+    "test:repli": "node scripts/test-repli.mjs",
     "start": "npx serve out",
     "typecheck": "tsc --noEmit",
     "check:external": "node scripts/check-external.mjs"

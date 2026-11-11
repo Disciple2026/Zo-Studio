@@ -5,7 +5,7 @@ import { Logo } from "./logo";
 
 export function Contact() {
   return (
-    <section id="contact" className="bg-emeraude text-white">
+    <section id="contact" className="bg-emeraude-fonce text-white">
       <div className="wrap bloc grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div>
           <h2 className="affiche text-[clamp(3.2rem,10vw,8rem)]">Parlons de votre projet</h2>
@@ -48,9 +48,10 @@ export function Footer() {
       <div className="wrap flex flex-wrap items-center justify-between gap-x-10 gap-y-6">
         <Logo />
         <nav aria-label="Pied de page" className="flex flex-wrap gap-x-6 gap-y-2 text-brume">
-          <a href="#services" className="hover:text-papier">Services</a>
+          <a href="#univers" className="hover:text-papier">Nos métiers</a>
           <a href="#realisations" className="hover:text-papier">Réalisations</a>
-          <a href="#reservation" className="hover:text-papier">Réserver</a>
+          <a href="#brief" className="hover:text-papier">Projet de site</a>
+          <a href="#reservation" className="hover:text-papier">Réserver un tournage</a>
           <Link href="/espace/" className="hover:text-papier">Mon espace client</Link>
           <Link href="/admin/" className="hover:text-papier">Administration</Link>
         </nav>

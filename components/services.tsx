@@ -8,10 +8,11 @@ export function Services() {
     <section id="services" className="bloc border-t border-trait">
       <div className="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="lg:sticky lg:top-28 lg:self-start">
+          <p className="mb-3 font-bold text-jade">Zoé Studio Vidéo</p>
           <h2 className="titre">Ce que nous filmons</h2>
           <p className="mt-5 max-w-md text-[1.1rem] text-brume">
             Du mariage à la soutenance, nous couvrons les moments de famille comme les projets
-            professionnels. Choisissez un service pour pré-remplir votre réservation.
+            professionnels. Choisissez un tournage pour pré-remplir votre réservation.
           </p>
         </div>
 

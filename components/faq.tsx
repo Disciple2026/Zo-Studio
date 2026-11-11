@@ -5,7 +5,7 @@ export function Faq() {
   return (
     <section id="questions" className="bloc border-t border-trait">
       <div className="wrap grid gap-x-16 gap-y-10 lg:grid-cols-[0.8fr_1.2fr]">
-        <h2 className="titre">Questions fréquentes</h2>
+        <h2 className="titre">Questions sur les tournages</h2>
         <div className="border-t border-trait">
           {FAQ.map((f) => (
             <details key={f.q} name="faq" className="group border-b border-trait">

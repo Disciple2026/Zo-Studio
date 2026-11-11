@@ -16,7 +16,7 @@ export function Reviews() {
   return (
     <section id="avis" className="bloc border-t border-trait">
       <div className="wrap flex flex-wrap items-end justify-between gap-6">
-        <h2 className="titre">Ce qu'en disent nos clients</h2>
+        <h2 className="titre">Nos clients vidéo en parlent</h2>
         <div className="flex gap-2">
           <button type="button" onClick={() => glisser(-1)} className="btn btn-ligne size-12 p-0">
             <ArrowLeft size={20} aria-hidden />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CircleCheck } from "lucide-react";
 import { BUDGETS, ETAPES, JOURS, SERVICES, WHATSAPP } from "@/lib/content";
-import { sb } from "@/lib/supabase";
+import { avecDelai, sb } from "@/lib/supabase";
 import { Calendar } from "./calendar";
 
 const HEURES = Array.from({ length: 36 }, (_, i) => {
@@ -43,7 +43,7 @@ export function Booking() {
     const nom = v("nom");
     setEtat("envoi");
 
-    const { error } = await sb.from("reservations").insert({
+    const { error } = await avecDelai(sb.from("reservations").insert({
       client_email: email,
       client_nom: nom,
       telephone: v("tel"),
@@ -55,7 +55,7 @@ export function Booking() {
       budget: v("budget"),
       attentes: v("attentes"),
       statut: "new",
-    });
+    }));
     if (error) {
       setEtat("saisie");
       setErreur(
@@ -65,7 +65,7 @@ export function Booking() {
     }
 
     // Premier message dans le chat de l'espace client + copie par e-mail au studio.
-    const { data: deja } = await sb.from("messages").select("id").eq("conversation_email", email).limit(1);
+    const { data: deja } = await avecDelai(sb.from("messages").select("id").eq("conversation_email", email).limit(1), 6000);
     if (!deja?.length) {
       await sb.from("messages").insert({
         conversation_email: email,

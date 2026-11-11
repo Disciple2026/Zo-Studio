@@ -9,7 +9,12 @@ export type Secteur = {
   titre: string;
   texte: string;
   bouton: string;
-  tuiles: string[];
+  /** Contenu propre au métier, affiché sous le titre de l'aperçu. */
+  bloc:
+    | { type: "carte"; plats: [string, string][] }
+    | { type: "produits"; articles: [string, string, string][] }
+    | { type: "compte"; date: string; lieu: string }
+    | { type: "photos"; series: string[] };
 };
 
 export const SECTEURS: Secteur[] = [
@@ -21,7 +26,7 @@ export const SECTEURS: Secteur[] = [
     titre: "La table du détroit",
     texte: "Cuisine tangéroise de saison, servie face à la mer.",
     bouton: "Réserver une table",
-    tuiles: ["Entrées", "Tajines", "Desserts"],
+    bloc: { type: "carte", plats: [["Tajine de lotte aux olives", "140"], ["Pastilla de la mer", "120"], ["Oranges à la cannelle", "45"]] },
   },
   {
     id: "boutique",
@@ -31,7 +36,7 @@ export const SECTEURS: Secteur[] = [
     titre: "Pièces cousues à Tanger",
     texte: "Des séries courtes, des matières choisies, livrées partout au Maroc.",
     bouton: "Voir la collection",
-    tuiles: ["Chemises", "Mailles", "Vestes"],
+    bloc: { type: "produits", articles: [["Chemise oxford", "520", "#A9CFE6"], ["Pull maille", "690", "#0F7A5F"], ["Veste de travail", "980", "#1F2C3A"]] },
   },
   {
     id: "mariage",
@@ -41,7 +46,7 @@ export const SECTEURS: Secteur[] = [
     titre: "Nous nous marions",
     texte: "Le 14 juin, à Tanger. Toutes les informations pour être des nôtres.",
     bouton: "Confirmer ma présence",
-    tuiles: ["Programme", "Accès", "Liste"],
+    bloc: { type: "compte", date: "2027-06-14T16:00:00", lieu: "Cap Spartel, Tanger" },
   },
   {
     id: "portfolio",
@@ -51,7 +56,7 @@ export const SECTEURS: Secteur[] = [
     titre: "Portraits et lumière du nord",
     texte: "Photographe à Tanger. Portraits, mariages, commandes pour les marques.",
     bouton: "Voir les séries",
-    tuiles: ["Portraits", "Mariages", "Commandes"],
+    bloc: { type: "photos", series: ["Détroit", "Médina", "Portraits", "Noces"] },
   },
 ];
 
@@ -89,6 +94,12 @@ export function texteSur(hex: string) {
   });
   const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
   return lum > 0.3 ? "#10140f" : "#ffffff";
+}
+
+/* Sur fond sombre, une couleur profonde devient illisible : on l'éclaircit vers le blanc. */
+export function eclaircir(hex: string, part: number) {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return "#" + c.map((v) => Math.round(v + (255 - v) * part).toString(16).padStart(2, "0")).join("");
 }
 
 export const POLICES = {

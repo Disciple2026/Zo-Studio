@@ -3,15 +3,15 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Zoé Studio | Production vidéo à Tanger",
+    default: "Zoé Studio | Sites web, vidéo et identité visuelle à Tanger",
     template: "%s | Zoé Studio",
   },
   description:
-    "Zoé Studio filme et monte vos mariages, baptêmes, soutenances, publicités et événements à Tanger et partout au Maroc. Vidéo livrée sous 48 à 72 h.",
+    "Simulez l'apparence de votre futur site, essayez des démonstrations, puis confiez sa réalisation à Zoé Studio. Sites web, vidéo et identité visuelle à Tanger et partout au Maroc.",
   openGraph: {
-    title: "Zoé Studio | Production vidéo à Tanger",
+    title: "Zoé Studio | Sites web, vidéo et identité visuelle à Tanger",
     description:
-      "Mariages, baptêmes, soutenances, publicités, événements. Réservez votre tournage en ligne.",
+      "Voyez votre futur site avant de le commander. Démonstrations à manipuler, brief en ligne.",
     locale: "fr_FR",
     type: "website",
   },

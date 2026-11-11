@@ -5,7 +5,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
 
 const DOSSIERS = ["app", "components", "lib", "lab", "public"];
-const EXTENSIONS = new Set([".ts", ".tsx", ".js", ".mjs", ".css", ".html", ".json", ".svg"]);
+const EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".css", ".html", ".json", ".svg", ".webmanifest"]);
 
 // Hôtes acceptés : services que le site appelle volontairement, jamais des fichiers à afficher.
 const AUTORISES = [
@@ -38,7 +38,7 @@ for (const f of fichiers) {
   const texte = readFileSync(f, "utf8");
   const repliDeclare = /repli\s*:/.test(texte);
   texte.split("\n").forEach((ligne, i) => {
-    for (const m of ligne.matchAll(/https?:\/\/([a-z0-9.-]+\.[a-z]{2,})/gi)) {
+    for (const m of ligne.matchAll(/(?:https?:)?\/\/([a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?=[\/"'`\s)]|$)/gi)) {
       const hote = m[1].toLowerCase();
       if (AUTORISES.includes(hote)) continue;
       if (AVEC_REPLI.includes(hote) && repliDeclare) { avecRepli++; continue; }
