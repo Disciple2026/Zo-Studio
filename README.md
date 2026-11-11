@@ -1,5 +1,8 @@
 # Zoé Studio
 
+> Le cahier des charges est dans `ZOE_STUDIO_MASTER_BRIEF.md`, les instructions de travail dans
+> `CLAUDE.md`, l'avancement dans `docs/ROADMAP.md`.
+
 Site de Zoé Studio, production vidéo à Tanger : présentation, galerie, réservation en ligne,
 espace client (réservations, films à télécharger, discussion) et administration.
 
@@ -17,6 +20,8 @@ espace client (réservations, films à télécharger, discussion) et administrat
 npm install
 npm run dev      # http://localhost:3000
 npm run build    # génère le site statique dans out/
+npm run typecheck
+npm run check:external   # refuse toute ressource chargée depuis un site tiers
 ```
 
 ## Organisation
