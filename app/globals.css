@@ -1,0 +1,241 @@
+@import "tailwindcss";
+@import "@fontsource-variable/sofia-sans/wght.css";
+@import "@fontsource-variable/sofia-sans-extra-condensed/wght.css";
+@import "@fontsource-variable/newsreader/wght.css";
+@import "@fontsource-variable/newsreader/wght-italic.css";
+
+/* Palette tirée du logo : ardoise bleutée, ruban rouge, filets de laiton. */
+@theme {
+  --color-nuit: #151a24;
+  --color-ardoise: #1e2531;
+  --color-ardoise-2: #283040;
+  --color-papier: #f0ebe1;
+  --color-brume: #a3abb9;
+  --color-laiton: #cba665;
+  --color-ruban: #d62839;
+  --color-ruban-fonce: #a81829;
+  --color-trait: rgb(203 166 101 / 0.28);
+
+  --font-sans: "Sofia Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-affiche: "Sofia Sans Extra Condensed Variable", "Arial Narrow", sans-serif;
+  --font-serif: "Newsreader Variable", Georgia, serif;
+
+  --ease-cine: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    background: var(--color-nuit);
+  }
+  body {
+    background: var(--color-nuit);
+    color: var(--color-papier);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-ruban);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-laiton);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  button,
+  summary,
+  [role="button"] {
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Titres « affiche de film » : condensés, capitales, très serrés. */
+  .affiche {
+    font-family: var(--font-affiche);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.005em;
+  }
+  .titre {
+    font-family: var(--font-affiche);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.9;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+  }
+  .wrap {
+    width: 100%;
+    max-width: 82rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  }
+  .bloc {
+    padding-block: clamp(4.5rem, 10vw, 8.5rem);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.1;
+    border: 1px solid transparent;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      color 0.2s,
+      transform 0.2s var(--ease-cine);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .btn-rouge {
+    background: var(--color-ruban);
+    color: #fff;
+  }
+  .btn-rouge:hover:not(:disabled) {
+    background: var(--color-ruban-fonce);
+  }
+  .btn-clair {
+    background: var(--color-papier);
+    color: var(--color-nuit);
+  }
+  .btn-clair:hover:not(:disabled) {
+    background: #fff;
+  }
+  .btn-ligne {
+    border-color: var(--color-trait);
+    color: var(--color-papier);
+  }
+  .btn-ligne:hover:not(:disabled) {
+    border-color: var(--color-laiton);
+    color: var(--color-laiton);
+  }
+  .btn-sm {
+    min-height: 2.25rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem;
+  }
+
+  .champ {
+    display: block;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.6rem;
+    background: var(--color-nuit);
+    border: 1px solid rgb(240 235 225 / 0.16);
+    color: var(--color-papier);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+  .champ::placeholder {
+    color: rgb(163 171 185 / 0.7);
+  }
+  .champ:hover {
+    border-color: rgb(240 235 225 / 0.32);
+  }
+  .champ:focus {
+    outline: none;
+    border-color: var(--color-laiton);
+    box-shadow: 0 0 0 3px rgb(203 166 101 / 0.22);
+  }
+  select.champ {
+    appearance: none;
+    padding-right: 2.4rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23cba665' stroke-width='1.6'%3E%3Cpath d='m1 1.5 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+  }
+  textarea.champ {
+    min-height: 7.5rem;
+    resize: vertical;
+  }
+  .etiquette {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-papier);
+  }
+
+  /* Panneau au grand coin arrondi, repris des filets du logo. */
+  .panneau {
+    background: var(--color-ardoise);
+    border: 1px solid var(--color-trait);
+    border-radius: 0.9rem;
+  }
+  .panneau-coin {
+    border-top-left-radius: clamp(2.5rem, 7vw, 6rem);
+  }
+
+  .pastille {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .pastille-new {
+    background: rgb(203 166 101 / 0.16);
+    color: var(--color-laiton);
+  }
+  .pastille-confirmed {
+    background: rgb(74 190 130 / 0.16);
+    color: #7fd6a6;
+  }
+  .pastille-done {
+    background: rgb(240 235 225 / 0.1);
+    color: var(--color-brume);
+  }
+
+  .onglet {
+    padding: 0.85rem 0.25rem;
+    margin-right: 1.5rem;
+    font-weight: 700;
+    color: var(--color-brume);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .onglet:hover {
+    color: var(--color-papier);
+  }
+  .onglet[aria-selected="true"] {
+    color: var(--color-papier);
+    border-color: var(--color-ruban);
+  }
+}
+
+@keyframes clignote {
+  50% {
+    opacity: 0.25;
+  }
+}
