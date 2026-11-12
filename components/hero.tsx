@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Monitor, Smartphone } from "lucide-react";
-import { AMBIANCES, COULEURS, POLICES, SECTEURS, eclaircir, texteSur, type Secteur } from "@/lib/simulateur";
+import { AMBIANCES, COULEURS, POLICES, SECTEURS, assombrir, eclaircir, texteSur, type Secteur } from "@/lib/simulateur";
 import { choisir, decrire, useSimulation } from "@/lib/simulation";
 
 const ease = [0.2, 0.7, 0.1, 1] as const;
@@ -145,7 +145,13 @@ export function Hero() {
   // La palette de l'aperçu se déduit de l'ambiance et de la couleur choisies.
   const fond = a.id === "minimal" ? "#FFFFFF" : a.fond === "clair" ? "#F4EEE1" : a.fond === "sombre" ? "#0C0C0D" : c.hex;
   const texte = a.fond === "couleur" ? texteSur(c.hex) : a.fond === "clair" ? "#161714" : "#F1ECE1";
-  const vif = a.fond === "sombre" ? eclaircir(c.hex, 0.45) : c.hex; // lisible sur fond sombre
+  // Couleur ajustée au fond : éclaircie sur sombre, assombrie sur clair si elle est trop pâle.
+  const vif =
+    a.fond === "sombre"
+      ? eclaircir(c.hex, 0.45)
+      : a.fond === "clair" && texteSur(c.hex) !== "#ffffff"
+        ? assombrir(c.hex, 0.32)
+        : c.hex;
   const accent = a.fond === "couleur" ? texte : vif;
   const surAccent = a.fond === "couleur" ? c.hex : texteSur(vif);
   const titrePolice = POLICES[a.police];

@@ -9,8 +9,8 @@ testé, critiqué et documenté.
 | Agent | Fichier | Rôle | Écrit dans |
 | --- | --- | --- | --- |
 | Directeur artistique et UI/UX | `ui-ux-designer` | Direction artistique, hiérarchie, animations, expérience | `docs/`, jetons CSS |
-| Architecte et développeur frontend | `frontend-developer` | Interfaces, composants, responsive, performances | code de l'application et des démos |
-| Architecte backend | `backend-architect` | Données, RLS, formulaires, services externes | `supabase/`, `lib/` |
+| Architecte et développeur frontend | `frontend-developer` | Interfaces, composants, responsive, performances | `app/`, `components/`, `lib/` hors `lib/supabase.ts`, `lab/` |
+| Architecte backend | `backend-architect` | Données, RLS, formulaires, services externes | `supabase/`, `lib/supabase.ts` |
 | QA, tests et sécurité | `qa-security-engineer` | Bugs, parcours, tailles d'écran, sécurité | rien (lecture seule) |
 | Critiqueur indépendant | `critiqueur-independant` | Cherche ce qui fait amateur ou incomplet ; peut rejeter | rien (lecture seule) |
 | Recherche et expériences | `research-experience` | Analyse des modèles, concepts originaux, prompts de démo | `docs/` |
@@ -58,6 +58,7 @@ npm run typecheck
 npm run build            # produit out/
 npm run check:external   # ressources tierces : interdites sans repli local déclaré
 npx serve out -l 4180    # sert le site construit pour les essais en navigateur
+npm run test:repli       # site servi : vérifie qu'il tient sans aucun hébergeur tiers
 ```
 
 Playwright et Chromium sont installés dans l'environnement : `require("playwright")` fonctionne
@@ -71,6 +72,14 @@ Autorisées depuis le 11 novembre 2026, à une condition : **le site doit s'affi
 La version locale est affichée d'abord ; la version distante ne la remplace que si toutes ses
 ressources ont répondu (`lib/remote.ts`). Tout fichier qui cite un hébergeur tiers déclare son
 repli par un commentaire `repli: …`, sans quoi `npm run check:external` échoue.
+
+## Limite d'utilisation
+
+Les agents partagent le quota d'utilisation de la session. Quatre agents en parallèle peuvent
+l'épuiser et être coupés avant d'avoir rendu leur rapport (arrivé deux fois le 11 novembre 2026).
+Règles tirées de l'expérience : briefs courts et bornés (nombre de captures, fichiers à lire),
+au plus trois agents à la fois, et si la QA est coupée, Claude principal exécute lui-même ses
+vérifications et le dit dans le rapport.
 
 ## Traces
 

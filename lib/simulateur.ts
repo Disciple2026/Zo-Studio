@@ -102,6 +102,11 @@ export function eclaircir(hex: string, part: number) {
   return "#" + c.map((v) => Math.round(v + (255 - v) * part).toString(16).padStart(2, "0")).join("");
 }
 
+export function assombrir(hex: string, part: number) {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return "#" + c.map((v) => Math.round(v * (1 - part)).toString(16).padStart(2, "0")).join("");
+}
+
 export const POLICES = {
   serif: "var(--font-serif)",
   sans: "var(--font-sans)",
