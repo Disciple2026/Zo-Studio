@@ -61,7 +61,10 @@ export function DemoPortant() {
         }
       />
       <p className="wrap pb-[clamp(3rem,7vw,5rem)] text-center text-[0.95rem] text-brume">
-        Démonstration. La boutique « Atelier Souani », ses pièces et ses prix sont fictifs.
+        Démonstration. La boutique « Atelier Souani », ses pièces et ses prix sont fictifs.{" "}
+        <a href="bibliotheque/" className="font-bold text-jade underline underline-offset-4">
+          Voir toutes les démonstrations
+        </a>
       </p>
     </section>
   );

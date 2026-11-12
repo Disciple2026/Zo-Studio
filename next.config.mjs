@@ -6,6 +6,8 @@ const nextConfig = {
   images: { unoptimized: true },
   // GitHub Pages sert le site sous /<nom-du-dépôt> ; le workflow fournit ce préfixe.
   basePath: process.env.PAGES_BASE_PATH || "",
+  // Les démos du Lab sont des fichiers statiques : leurs liens ont besoin du même préfixe.
+  env: { NEXT_PUBLIC_BASE_PATH: process.env.PAGES_BASE_PATH || "" },
 };
 
 export default nextConfig;

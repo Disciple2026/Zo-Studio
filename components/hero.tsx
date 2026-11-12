@@ -187,7 +187,7 @@ export function Hero() {
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="#brief" className="btn btn-primaire">Demander ce site</a>
-            <a href="#demo" className="btn btn-ligne">Essayer une démo</a>
+            <a href="bibliotheque/" className="btn btn-ligne">Essayer des démos</a>
           </div>
         </motion.div>
 

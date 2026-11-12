@@ -49,6 +49,7 @@ export function Footer() {
         <Logo />
         <nav aria-label="Pied de page" className="flex flex-wrap gap-x-6 gap-y-2 text-brume">
           <a href="#univers" className="hover:text-papier">Nos métiers</a>
+          <Link href="/bibliotheque/" className="hover:text-papier">Bibliothèque</Link>
           <a href="#realisations" className="hover:text-papier">Réalisations</a>
           <a href="#brief" className="hover:text-papier">Projet de site</a>
           <a href="#reservation" className="hover:text-papier">Réserver un tournage</a>

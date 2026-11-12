@@ -4,7 +4,7 @@ const UNIVERS = [
   { icone: MonitorSmartphone, nom: "Sites web", texte: "Sites vitrines, boutiques en ligne, sites de mariage et d'événement, réservation, portfolios.", lien: "#brief", action: "Décrire mon projet de site" },
   { icone: Clapperboard, nom: "Vidéo", texte: "Mariages, baptêmes, soutenances, publicités, formats pour les réseaux. Livraison sous 48 à 72 h.", lien: "#services", action: "Voir les tournages" },
   { icone: Palette, nom: "Identité visuelle", texte: "Logo, charte, affiches et supports pour que votre marque se reconnaisse partout.", lien: "#brief", action: "Parler de ma marque" },
-  { icone: Sparkles, nom: "Expériences interactives", texte: "Démonstrations à manipuler, animations au défilement, 3D quand elle sert le propos.", lien: "#demo", action: "Essayer une démo" },
+  { icone: Sparkles, nom: "Expériences interactives", texte: "Démonstrations à manipuler, animations au défilement, 3D quand elle sert le propos.", lien: "bibliotheque/", action: "Ouvrir la bibliothèque" },
 ];
 
 export function Univers() {

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vingt-Deux Couverts — démonstration Zoé Studio</title>
+<meta name="description" content="Démonstration : le site d'un petit restaurant fictif où l'on compose sa table vue du plafond.">
+<style>
+@font-face{font-family:"Space Grotesk";src:url("fonts/space-grotesk-latin-wght-normal.woff2") format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");font-weight:100 800;font-display:swap}
+:root{--creme:#FBF7EF;--encre:#1B1B1B;--rouge:#D7263D;--vert:#2E6F57;--gris:#5d5a54;--trait:rgba(27,27,27,.14);--bois:#b98455}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--creme);color:var(--encre);font:400 1.05rem/1.55 "Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rouge);outline-offset:3px;border-radius:4px}
+button{font:inherit;color:inherit;cursor:pointer}
+.bandeau{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;justify-content:space-between;padding:.55rem clamp(1rem,4vw,3rem);background:var(--encre);color:var(--creme);font-size:.9rem}
+.bandeau a{font-weight:600}
+.wrap{max-width:84rem;margin:0 auto;padding-inline:clamp(1rem,4vw,3rem)}
+header.tete{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.2rem 1rem;padding-block:1.4rem;border-bottom:2px solid var(--encre)}
+.nom{font-weight:700;font-size:1.25rem;letter-spacing:-.02em}
+.nom b{color:var(--rouge)}
+nav.liens{display:flex;gap:1.4rem;font-weight:500;white-space:nowrap}
+nav.liens a{text-decoration:none;border-bottom:2px solid transparent;padding-block:.6rem}
+nav.liens a:hover{border-color:var(--rouge)}
+.intro{display:grid;gap:1rem 3rem;padding-block:clamp(1.4rem,3vw,2.2rem)}
+h1{font-size:clamp(2.5rem,6vw,4.8rem);line-height:.92;letter-spacing:-.045em;font-weight:700;max-width:11ch}
+.intro p{max-width:34rem;font-size:1.15rem;color:var(--gris)}
+@media(min-width:900px){.intro{grid-template-columns:1.2fr .8fr;align-items:end}}
+
+/* ── La salle ── */
+.salle{display:grid;gap:1.5rem;padding-bottom:clamp(3rem,7vw,6rem)}
+@media(min-width:1000px){.salle{grid-template-columns:minmax(0,1fr) 21rem;align-items:start}}
+.plan{min-width:0}
+.passe{display:flex;gap:.6rem;overflow-x:auto;padding:.4rem .2rem 1rem;scrollbar-width:thin}
+.plat{flex:0 0 auto;width:7.2rem;background:none;border:0;padding:.3rem;border-radius:14px;text-align:center;touch-action:none}
+.plat:hover .assiette,.plat:focus-visible .assiette{transform:translateY(-4px) rotate(-4deg)}
+.plat .assiette{width:5.6rem;height:5.6rem;margin:0 auto .35rem;transition:transform .25s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 6px 8px rgba(27,27,27,.18))}
+.plat span{display:block;font-size:.86rem;line-height:1.2;font-weight:600}
+.plat small{font:500 .8rem "JetBrains Mono",monospace;color:var(--gris)}
+.aide{font-size:.95rem;color:var(--gris);margin-bottom:.6rem}
+
+.table{position:relative;aspect-ratio:16/10;border-radius:26px;background:
+  repeating-linear-gradient(92deg,rgba(255,255,255,.07) 0 3px,transparent 3px 46px),
+  linear-gradient(180deg,#c9925f,#a9733f);
+  box-shadow:inset 0 0 0 10px #8a5a2e,inset 0 0 60px rgba(60,30,5,.35),0 30px 60px -25px rgba(27,27,27,.5);overflow:hidden;touch-action:none}
+@media(max-width:700px){.table{aspect-ratio:1/1.05}}
+.chemin{position:absolute;inset:14% 6%;border-radius:10px;background:repeating-linear-gradient(0deg,rgba(27,27,27,.035) 0 2px,transparent 2px 9px),#f6efe0;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.table.cible{box-shadow:inset 0 0 0 10px var(--vert),inset 0 0 60px rgba(60,30,5,.35),0 30px 60px -25px rgba(27,27,27,.5)}
+.vide{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:2rem;font-weight:600;color:rgba(27,27,27,.55);pointer-events:none;font-size:clamp(1rem,2.2vw,1.35rem)}
+.vide[hidden]{display:none}
+.pose{position:absolute;width:clamp(4.6rem,13%,8rem);aspect-ratio:1;translate:-50% -50%;background:none;border:0;padding:0;border-radius:50%;cursor:grab;touch-action:none;filter:drop-shadow(0 10px 10px rgba(40,20,0,.38));animation:poser .35s cubic-bezier(.2,1.4,.4,1)}
+.pose:active{cursor:grabbing}
+.pose svg,.plat svg,.fantome svg{width:100%;height:100%;display:block}
+.pose .oter{position:absolute;top:-6px;right:-6px;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--encre);color:#fff;font-weight:700;line-height:1.7rem;font-size:1rem;opacity:0;transition:opacity .15s;pointer-events:none}
+.pose:hover .oter,.pose:focus-visible .oter{opacity:1}
+@keyframes poser{from{scale:1.25;opacity:0}}
+.fantome{position:fixed;left:0;top:0;width:6.5rem;height:6.5rem;pointer-events:none;z-index:50;translate:-50% -50%;filter:drop-shadow(0 18px 14px rgba(40,20,0,.4));rotate:6deg}
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.btn{min-height:2.9rem;padding:.6rem 1.2rem;border-radius:999px;border:2px solid var(--encre);background:none;font-weight:600;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{background:var(--encre);color:var(--creme)}
+.btn.plein{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.btn.plein:hover{background:#b21c31;border-color:#b21c31}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── L'addition ── */
+.ticket{background:#fff;font:500 .92rem/1.5 "JetBrains Mono",monospace;padding:1.4rem 1.2rem 2rem;box-shadow:0 20px 40px -22px rgba(27,27,27,.45);position:relative;
+  --dent:10px;-webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--dent) 51% repeat-x,linear-gradient(#000 0 0) top/100% calc(100% - var(--dent)/2 + .5px) no-repeat;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--dent) 51% repeat-x,linear-gradient(#000 0 0) top/100% calc(100% - var(--dent)/2 + .5px) no-repeat}
+.ticket h2{font:700 1rem "JetBrains Mono",monospace;text-align:center;letter-spacing:.08em}
+.ticket .adr{text-align:center;color:var(--gris);font-size:.82rem;margin-bottom:.8rem}
+.ticket hr{border:0;border-top:1px dashed var(--encre);margin:.7rem 0}
+.ticket ul{list-style:none;padding:0;min-height:3rem}
+.ticket li{display:flex;gap:.6rem;justify-content:space-between;animation:ligne .3s ease-out}
+.ticket li span:first-child{min-width:0}
+@keyframes ligne{from{opacity:0;translate:0 -6px}}
+.ticket .rien{color:var(--gris);justify-content:center;padding-block:.6rem}
+.ticket .tot{display:flex;justify-content:space-between;font-weight:800;font-size:1.15rem}
+.ticket .note{color:var(--gris);font-size:.8rem;margin-top:.7rem;text-align:center}
+.nb{display:inline-block;min-width:1.5ch}
+
+/* ── Le reste de la page ── */
+.bandes{border-top:2px solid var(--encre)}
+.bande{display:grid;gap:.6rem 3rem;padding-block:clamp(2rem,5vw,3.5rem);border-bottom:1px solid var(--trait)}
+@media(min-width:800px){.bande{grid-template-columns:16rem 1fr}}
+.bande h2{font-size:1.6rem;letter-spacing:-.03em;line-height:1.1}
+.bande p{max-width:40rem;color:var(--gris)}
+.bande dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1.5rem;max-width:30rem}
+.bande dt{font-weight:600}
+footer{padding-block:2.5rem 4rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center}
+footer p{color:var(--gris);font-size:.95rem;max-width:36rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="bandeau"><span>Démonstration Zoé Studio — restaurant, carte et prix fictifs</span><a href="../../bibliotheque/">Retour à la bibliothèque</a></div>
+
+<div class="wrap">
+  <header class="tete">
+    <p class="nom">Vingt-Deux <b>Couverts</b></p>
+    <nav class="liens" aria-label="Sections"><a href="#salle">La table</a><a href="#maison">La maison</a><a href="#venir">Venir</a></nav>
+  </header>
+
+  <section class="intro">
+    <h1>Composez votre table</h1>
+    <p>Une salle, vingt-deux places, une carte courte qui change avec le marché. Faites glisser les assiettes sur la table : l'addition se tient à jour, vous savez où vous allez avant de réserver.</p>
+  </section>
+
+  <section class="salle" id="salle" aria-label="La table et l'addition">
+    <div class="plan">
+      <p class="aide" id="aide">Glissez un plat sur la table, ou touchez-le pour l'y poser. Sur la table, glissez une assiette dehors pour la retirer.</p>
+      <div class="passe" id="passe" role="group" aria-label="La carte"></div>
+      <div class="table" id="table" role="group" aria-label="Votre table" aria-describedby="aide">
+        <div class="chemin" aria-hidden="true"></div>
+        <p class="vide" id="vide">La table est mise.<br>Il ne manque que les assiettes.</p>
+      </div>
+      <div class="actions">
+        <button class="btn" id="debarrasser" disabled>Débarrasser la table</button>
+        <a class="btn plein" href="../../#brief">Créer un site dans ce style</a>
+      </div>
+    </div>
+
+    <aside class="ticket" aria-label="Addition">
+      <h2>VINGT-DEUX COUVERTS</h2>
+      <p class="adr">9, rue du Four · Tanger<br><span id="date"></span></p>
+      <hr>
+      <ul id="lignes"><li class="rien">— table vide —</li></ul>
+      <hr>
+      <p class="tot"><span>TOTAL</span><span><span id="total">0</span> MAD</span></p>
+      <p class="note"><span id="compte">0 assiette</span> · service compris<br>Addition indicative, prix fictifs</p>
+      <p class="sr" role="status" id="annonce"></p>
+    </aside>
+  </section>
+</div>
+
+<div class="bandes">
+  <div class="wrap">
+    <section class="bande" id="maison">
+      <h2>La maison</h2>
+      <div>
+        <p>La cuisine est ouverte sur la salle, il n'y a pas de porte entre les deux. Vous voyez le poisson arriver le matin et le pain sortir du four à onze heures. Quand un plat est fini, il est rayé de l'ardoise.</p>
+      </div>
+    </section>
+    <section class="bande">
+      <h2>La carte</h2>
+      <p>Huit plats, jamais plus. Elle est réécrite chaque mardi après le marché de Sidi Bouabid. Les prix ci-dessus sont ceux de la démonstration.</p>
+    </section>
+    <section class="bande" id="venir">
+      <h2>Venir</h2>
+      <dl>
+        <dt>Midi</dt><dd>12 h 30 à 15 h, du mardi au dimanche</dd>
+        <dt>Soir</dt><dd>19 h 30 à 23 h, du mardi au samedi</dd>
+        <dt>Adresse</dt><dd>9, rue du Four, Tanger (adresse fictive)</dd>
+        <dt>Tables</dt><dd>Vingt-deux places, réservation conseillée</dd>
+      </dl>
+    </section>
+    <footer>
+      <p>Vingt-Deux Couverts n'existe pas. Cette page montre ce que Zoé Studio peut concevoir pour un restaurant : une carte que l'on manipule au lieu de la lire.</p>
+      <a class="btn" href="../../bibliotheque/">Voir les autres démonstrations</a>
+    </footer>
+  </div>
+</div>
+
+<script>
+/* Carte fictive. Chaque assiette est dessinée en SVG à partir de quelques formes. */
+const CARTE = [
+  { id:"zaalouk", nom:"Zaalouk fumé", prix:45, fond:"#7a4a3a", pieces:[["#c0392b",.28,-.1,.12],["#e8c36a",-.2,.18,.08],["#3d7a4f",.05,.3,.07]] },
+  { id:"sardines", nom:"Sardines farcies", prix:70, fond:null, pieces:[["#6f8fa3",-.22,-.05,.2,2.2],["#6f8fa3",.05,.08,.2,2.2],["#6f8fa3",.3,.2,.2,2.2],["#e6d25a",-.3,.32,.09]] },
+  { id:"pastilla", nom:"Pastilla de la mer", prix:120, fond:"#d9a441", pieces:[["#f3e3b0",0,0,.34],["#b9772a",-.1,-.1,.05],["#b9772a",.14,.06,.05],["#b9772a",-.02,.18,.05]] },
+  { id:"tajine", nom:"Tajine de lotte", prix:140, fond:"#b5562c", pieces:[["#f1ece0",-.12,-.08,.2],["#f1ece0",.2,.12,.17],["#4f6b3a",-.26,.24,.07],["#4f6b3a",.3,-.24,.07],["#e2b23a",.02,.3,.08]] },
+  { id:"couscous", nom:"Couscous du vendredi", prix:110, fond:"#ecd9a0", pieces:[["#d97a2b",-.2,-.15,.13],["#5d8a4a",.2,-.2,.12],["#f0f0e6",.18,.2,.13],["#a8442e",-.18,.22,.11]] },
+  { id:"salade", nom:"Salade d'oranges", prix:40, fond:null, pieces:[["#f39c2d",-.2,-.16,.19],["#f5a83d",.2,-.06,.19],["#f39c2d",-.04,.24,.19],["#6b3f24",.02,.02,.03]] },
+  { id:"msemen", nom:"Msemen au miel", prix:35, fond:null, pieces:[["#e3b56a",0,0,.36,1,10],["#c98b2e",.05,-.04,.1]] },
+  { id:"the", nom:"Thé à la menthe", prix:20, fond:"#8f6a2a", pieces:[["#c9a04a",0,0,.3],["#3f8a52",-.08,-.06,.1],["#3f8a52",.1,.08,.08]] },
+];
+
+function assiette(p) {
+  const formes = p.pieces.map(([c, x, y, r, etire = 1, coin = 0]) =>
+    coin
+      ? `<rect x="${50 + x * 100 - r * 100}" y="${50 + y * 100 - r * 100}" width="${r * 200}" height="${r * 200}" rx="${coin}" fill="${c}" transform="rotate(12 50 50)"/>`
+      : `<ellipse cx="${50 + x * 100}" cy="${50 + y * 100}" rx="${r * 100 * etire / (etire > 1 ? 1.6 : 1)}" ry="${r * 100 / (etire > 1 ? 2.4 : 1)}" fill="${c}" transform="rotate(${etire > 1 ? -28 : 0} ${50 + x * 100} ${50 + y * 100})"/>`
+  ).join("");
+  return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+    <circle cx="50" cy="50" r="48" fill="#fffdf8"/><circle cx="50" cy="50" r="48" fill="none" stroke="#e3dccb" stroke-width="2"/>
+    <circle cx="50" cy="50" r="36" fill="${p.fond ?? "#f7f2e6"}"/><circle cx="50" cy="50" r="36" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="1.5"/>
+    ${formes}
+    <ellipse cx="34" cy="30" rx="16" ry="7" fill="#fff" opacity=".22" transform="rotate(-30 34 30)"/></svg>`;
+}
+
+const $ = (id) => document.getElementById(id);
+const table = $("table"), passe = $("passe");
+const MAX = 14;
+let poses = [], suivant = 1;
+const fmt = (n) => n.toLocaleString("fr-FR");
+
+$("date").textContent = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+
+/* ── La carte ── */
+for (const p of CARTE) {
+  const b = document.createElement("button");
+  b.className = "plat"; b.type = "button";
+  b.setAttribute("aria-label", `Poser sur la table : ${p.nom}, ${p.prix} dirhams`);
+  b.innerHTML = `<div class="assiette">${assiette(p)}</div><span>${p.nom}</span><small>${p.prix} MAD</small>`;
+  b.addEventListener("click", () => { if (!b.dataset.glisse) poser(p, libre()); delete b.dataset.glisse; });
+  glisser(b, p, null);
+  passe.appendChild(b);
+}
+
+/* Une place libre sur la table, en grille lâche, pour les poses au clavier ou au toucher. */
+function libre() {
+  const n = poses.length;
+  const cols = table.clientWidth < 520 ? 3 : 5; // moins d'assiettes par rangée sur petit écran
+  const rang = Math.floor(n / cols);
+  return { x: 20 + (n % cols) * (60 / (cols - 1)) + (rang % 2) * 5, y: 28 + (rang % 4) * (cols === 3 ? 17 : 22) };
+}
+
+function poser(p, { x, y }) {
+  if (poses.length >= MAX) return annoncer(`La table est pleine : ${MAX} assiettes au plus.`);
+  const pose = { cle: suivant++, p, x: Math.min(92, Math.max(8, x)), y: Math.min(86, Math.max(14, y)), rot: Math.round(Math.random() * 50 - 25) };
+  poses.push(pose);
+  const b = document.createElement("button");
+  b.className = "pose"; b.type = "button"; b.dataset.cle = pose.cle;
+  b.style.left = pose.x + "%"; b.style.top = pose.y + "%"; b.style.rotate = pose.rot + "deg";
+  b.setAttribute("aria-label", `${p.nom} sur la table. Appuyez sur Suppr pour retirer.`);
+  b.innerHTML = assiette(p) + `<span class="oter" aria-hidden="true">×</span>`;
+  b.addEventListener("keydown", (e) => { if (["Delete", "Backspace"].includes(e.key)) { e.preventDefault(); oter(pose.cle, true); } });
+  glisser(b, p, pose);
+  table.appendChild(b);
+  rendre(); annoncer(`${p.nom} posé. Total ${fmt(total())} dirhams.`);
+}
+
+function oter(cle, focus) {
+  const pose = poses.find((x) => x.cle === cle); if (!pose) return;
+  poses = poses.filter((x) => x.cle !== cle);
+  table.querySelector(`[data-cle="${cle}"]`)?.remove();
+  rendre(); annoncer(`${pose.p.nom} retiré. Total ${fmt(total())} dirhams.`);
+  if (focus) (table.querySelector(".pose") ?? passe.querySelector(".plat")).focus();
+}
+
+const total = () => poses.reduce((s, x) => s + x.p.prix, 0);
+function annoncer(t) { $("annonce").textContent = t; }
+
+function rendre() {
+  const groupes = new Map();
+  for (const { p } of poses) groupes.set(p.id, { p, n: (groupes.get(p.id)?.n ?? 0) + 1 });
+  $("lignes").innerHTML = groupes.size
+    ? [...groupes.values()].map(({ p, n }) => `<li><span><span class="nb">${n}</span>× ${p.nom}</span><span>${fmt(p.prix * n)}</span></li>`).join("")
+    : `<li class="rien">— table vide —</li>`;
+  $("total").textContent = fmt(total());
+  $("compte").textContent = `${poses.length} assiette${poses.length > 1 ? "s" : ""}`;
+  $("vide").hidden = poses.length > 0;
+  $("debarrasser").disabled = poses.length === 0;
+}
+
+$("debarrasser").addEventListener("click", () => {
+  poses = []; table.querySelectorAll(".pose").forEach((e) => e.remove()); rendre(); annoncer("Table débarrassée.");
+});
+
+/* ── Glisser : depuis la carte (pose = null) ou sur la table (pose = l'assiette déplacée) ── */
+function glisser(el, p, pose) {
+  el.addEventListener("pointerdown", (e) => {
+    if (e.button) return;
+    const depart = { x: e.clientX, y: e.clientY };
+    let fantome = null, bouge = false;
+    const suivre = (ev) => {
+      if (!bouge && Math.hypot(ev.clientX - depart.x, ev.clientY - depart.y) < 8) return;
+      if (!bouge) {
+        bouge = true;
+        fantome = document.createElement("div"); fantome.className = "fantome"; fantome.innerHTML = assiette(p);
+        document.body.appendChild(fantome);
+        if (pose) el.style.visibility = "hidden";
+        try { el.setPointerCapture(ev.pointerId); } catch {}
+      }
+      fantome.style.transform = `translate(${ev.clientX}px,${ev.clientY}px)`;
+      table.classList.toggle("cible", dedans(ev));
+      ev.preventDefault();
+    };
+    const finir = (ev) => {
+      el.removeEventListener("pointermove", suivre); el.removeEventListener("pointerup", finir); el.removeEventListener("pointercancel", finir);
+      table.classList.remove("cible");
+      if (!bouge) return;
+      fantome.remove();
+      const r = table.getBoundingClientRect();
+      const pos = { x: ((ev.clientX - r.left) / r.width) * 100, y: ((ev.clientY - r.top) / r.height) * 100 };
+      if (pose) {
+        if (ev.type === "pointercancel" || dedans(ev)) {
+          if (ev.type !== "pointercancel") { pose.x = Math.min(92, Math.max(8, pos.x)); pose.y = Math.min(86, Math.max(14, pos.y)); el.style.left = pose.x + "%"; el.style.top = pose.y + "%"; }
+          el.style.visibility = "";
+        } else oter(pose.cle, false);
+      } else {
+        el.dataset.glisse = "1"; setTimeout(() => delete el.dataset.glisse, 60);
+        if (ev.type !== "pointercancel" && dedans(ev)) poser(p, pos);
+      }
+    };
+    el.addEventListener("pointermove", suivre); el.addEventListener("pointerup", finir); el.addEventListener("pointercancel", finir);
+  });
+}
+function dedans(ev) {
+  const r = table.getBoundingClientRect();
+  return ev.clientX > r.left && ev.clientX < r.right && ev.clientY > r.top && ev.clientY < r.bottom;
+}
+rendre();
+</script>
+</body>
+</html>
